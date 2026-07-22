@@ -70,29 +70,29 @@ export default function HomePage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-12 py-4 md:py-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
-              {/* Left Column */}
-              <div className="lg:col-span-7 space-y-6 text-left">
+              {/* Text Column (Renders first, center-aligned on mobile) */}
+              <div className="lg:col-span-7 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start order-1 lg:order-1">
                 <div className="ad-map-badge">
                   <div className="ad-map-live-dot" /> NOW LIVE IN LUCKNOW
                 </div>
-                <h1 className="hero-title text-4xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.1] text-text-dark font-display">
+                <h1 className="hero-title text-4xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.1] text-text-dark font-display text-center lg:text-left">
                   Turn Daily Commutes Into <br className="hidden md:inline" />
                   High-Impact Campaigns.
                 </h1>
-                <p className="text-base sm:text-lg text-text-grey max-w-xl leading-relaxed font-sans">
+                <p className="text-base sm:text-lg text-text-grey max-w-xl leading-relaxed font-sans text-center lg:text-left">
                   Smart cloud-connected LED screens securely mounted inside commercial auto-rickshaws, delivering 10–15 minutes of unskippable attention from Lucknow passengers and pedestrians.
                 </p>
-                <div className="pt-2">
+                <div className="pt-2 flex justify-center lg:justify-start w-full">
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-submit font-sans">
                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.719-1.465L0 24z"/></svg>
                     Chat on WhatsApp
                   </a>
                 </div>
-                <p className="text-xs text-text-muted font-sans font-medium">Instant response. Zero commitment.</p>
+                <p className="text-xs text-text-muted font-sans font-medium text-center lg:text-left">Instant response. Zero commitment.</p>
               </div>
 
-              {/* Right Column (Demo video trigger) */}
-              <div className="lg:col-span-5 flex justify-center">
+              {/* Video Column (Renders second below text) */}
+              <div className="lg:col-span-5 flex justify-center order-2 lg:order-2">
                 <div className="ad-demo-c-visual-wrap w-full max-w-[450px]" onClick={() => setModalActive(true)}>
                   <div className="ad-demo-c-img-container">
                     <img 
@@ -110,6 +110,8 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+
+
 
             </div>
           </div>
