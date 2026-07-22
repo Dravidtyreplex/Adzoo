@@ -5,259 +5,245 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Link from "next/link";
 
+const LUCKNOW_CORRIDORS = [
+  { id: "hazratganj", name: "Hazratganj Hub", autos: 120, impressions: "45,000+", traffic: "High Retail & Commercial Footfall", x: 640, y: 210, textAnchor: "start" },
+  { id: "gomti-nagar", name: "Gomti Nagar Corridor", autos: 150, impressions: "60,000+", traffic: "IT Parks & Corporate Hubs", x: 840, y: 260, textAnchor: "start" },
+  { id: "aminabad", name: "Aminabad Market", autos: 90, impressions: "38,000+", traffic: "Dense Wholesale Shopping District", x: 380, y: 240, textAnchor: "end" },
+  { id: "charbagh", name: "Charbagh Transit Hub", autos: 110, impressions: "52,000+", traffic: "Railway Station & Commuter Traffic", x: 480, y: 350, textAnchor: "start" },
+  { id: "alambagh", name: "Alambagh Bus Terminal", autos: 85, impressions: "32,000+", traffic: "Intercity Commuter Intersection", x: 220, y: 380, textAnchor: "end" },
+  { id: "aliganj", name: "Aliganj Institutional Zone", autos: 75, impressions: "28,000+", traffic: "Colleges & Coaching Hubs", x: 500, y: 140, textAnchor: "start" },
+];
+
 const FAQ_DATA = [
   { 
-    q: "What is auto advertising and how does it work?", 
-    a: "Auto advertising displays your brand on high-brightness LED screens mounted inside or on auto-rickshaws. Your ad plays on loop as autos travel through busy corridors, markets, and junctions, capturing eye-level attention from passengers and pedestrians." 
+    q: "How does Adzoop DOOH auto advertising work?", 
+    a: "We mount cloud-connected 10-inch HD LED screens inside commercial auto-rickshaws. Your ad plays on continuous loop directly at eye-level to passengers during their 12–15 minute commutes across Lucknow." 
   },
   { 
-    q: "Why is Adzoop better than online ads and billboards?", 
-    a: "Billboards are static, expensive, and easy to ignore. Online ads suffer from skip buttons and ad-blockers. Adzoop is eye-level, moves where the crowd moves, and provides uninterrupted exposure for a fraction of the cost." 
+    q: "Why is auto LED screen media better than static billboards?", 
+    a: "Billboards are expensive, static, and passed by in seconds. Adzoop screens deliver 12–15 minutes of unskippable, captive attention inside moving vehicles for a fraction of outdoor billboard rates." 
   },
   { 
-    q: "Who will see my ads with Adzoop?", 
-    a: "Your ads will be seen by commuters, shoppers, pedestrians, and passengers inside high-traffic markets, transit hubs, and commercial streets across Lucknow." 
+    q: "Do I get verified proof that my ads were played?", 
+    a: "Yes. Our cloud platform logs exact screen play count, active hours, and vehicle GPS route compliance, giving you 100% transparent proof-of-play (PoP) reports." 
   },
   { 
-    q: "Do I get proof that my ads are running?", 
-    a: "Yes. We provide complete transparency with real-time GPS tracking data and video/photo proofs showing your campaign live on the road." 
+    q: "Can I choose specific routes in Lucknow?", 
+    a: "Absolutely. You can select target commercial zones like Hazratganj, Gomti Nagar, Aminabad, or Charbagh to align visibility with your buyer demographic." 
   },
   { 
-    q: "Which businesses can benefit from Adzoop advertising?", 
-    a: "Any retail shop, local brand, service provider, medical center, educational institute, or corporate brand looking to build hyper-local awareness and drive high recall." 
-  },
-  { 
-    q: "Is auto advertising effective for local marketing?", 
-    a: "Extremely. It targets specific routes and high-traffic markets where your prospective buyers live and shop, maximizing local footfall and inquiries." 
-  },
-  { 
-    q: "How can I join Adzoop as a driver (partner)?", 
-    a: "If you drive a commercial auto-rickshaw in Lucknow, you can register with us. We will mount a smart LED display on your auto, and you will earn extra passive income." 
-  },
-  { 
-    q: "How do drivers earn with Adzoop?", 
-    a: "Drivers receive direct monthly payments simply for keeping the display running while driving their regular routes. There is zero extra effort required." 
-  },
-  { 
-    q: "Do drivers need to do extra work?", 
-    a: "No. The smart LED system turns on and off automatically with the vehicle's ignition and syncs cloud creatives without driver intervention." 
+    q: "How do auto drivers benefit from Adzoop?", 
+    a: "Driver partners receive guaranteed monthly passive payouts simply for keeping the screen running during their daily driving hours, boosting driver livelihood." 
   }
 ];
 
 export default function HomePage() {
   const [modalActive, setModalActive] = useState(false);
+  const [activeCorridor, setActiveCorridor] = useState(LUCKNOW_CORRIDORS[0]);
+  const [activeEcosystemTab, setActiveEcosystemTab] = useState(0);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const toggleFaq = (index: number) => {
-    setActiveFaq(activeFaq === index ? null : index);
+  // ROI Calculator State
+  const [autoCount, setAutoCount] = useState<number>(10);
+  const [campaignDays, setCampaignDays] = useState<number>(14);
+
+  // Dynamic Rate Calculations
+  const getDailyRate = (count: number) => {
+    if (count >= 30) return 49;
+    if (count >= 20) return 59;
+    if (count >= 10) return 69;
+    return 79;
   };
 
-  const whatsappUrl = "https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%27d%20like%20to%20know%20more%20about%20advertising%20on%20your%20LED%20displays.";
+  const currentRate = getDailyRate(autoCount);
+  const totalBudget = autoCount * campaignDays * currentRate;
+  const totalImpressions = (autoCount * campaignDays * 15000).toLocaleString("en-IN");
 
-  // Brand badges for marquee (using styled text badges for 100% original representation)
+  const whatsappCalculatorUrl = `https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%20want%20to%20book%20${autoCount}%20autos%20for%20${campaignDays}%20days.%20Calculated%20budget%3A%20%E2%82%B9${totalBudget.toLocaleString("en-IN")}.`;
+
   const clientBrands = [
     "RETAIL MART", "HEALTHCARE PLUS", "METRO FITNESS", "LUCKNOW SWEETS",
     "URBAN FASHION", "EDU-SPARK ACADEMY", "FINANCE FIRST", "BURGER CLUB"
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Header />
-      <main className="flex-grow pt-[80px]">
+    <div className="flex flex-col min-h-screen bg-white text-[#0B132B] font-sans relative overflow-x-hidden">
+      
+      {/* Background Ambient Radial Glow */}
+      <div className="ambient-glow-brand-top" />
 
-        {/* ═══ HERO SECTION ═══ */}
-        <section className="minimal-hero-white">
-          <div className="mx-auto max-w-7xl px-6 lg:px-12 py-4 md:py-8">
+      <Header />
+
+      <main className="flex-grow pt-[105px] relative z-10">
+
+        {/* ═══ 1. HERO SECTION WITH LIVE ROI CALCULATOR ═══ */}
+        <section className="px-6 py-10 md:py-16">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
-              {/* Text Column (Renders first, center-aligned on mobile) */}
-              <div className="lg:col-span-7 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start order-1 lg:order-1">
-                <div className="ad-map-badge">
-                  <div className="ad-map-live-dot" /> NOW LIVE IN LUCKNOW
+              {/* Left Column: Headline & Subtitle */}
+              <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+                
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-[#0052FF]/20 text-xs font-semibold font-mono text-[#0052FF] animate-pulse">
+                  <span className="status-dot-brand" />
+                  <span>⚡ ADVERTISE BETTER. GROW SMARTER.</span>
                 </div>
-                <h1 className="hero-title text-4xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.1] text-text-dark font-display text-center lg:text-left">
-                  Turn Daily Commutes Into <br className="hidden md:inline" />
-                  High-Impact Campaigns.
-                </h1>
-                <p className="text-base sm:text-lg text-text-grey max-w-xl leading-relaxed font-sans text-center lg:text-left">
-                  Smart cloud-connected LED screens securely mounted inside commercial auto-rickshaws, delivering 10–15 minutes of unskippable attention from Lucknow passengers and pedestrians.
-                </p>
-                <div className="pt-2 flex justify-center lg:justify-start w-full">
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-submit font-sans">
-                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.719-1.465L0 24z"/></svg>
-                    Chat on WhatsApp
-                  </a>
-                </div>
-                <p className="text-xs text-text-muted font-sans font-medium text-center lg:text-left">Instant response. Zero commitment.</p>
-              </div>
 
-              {/* Video Column (Renders second below text) */}
-              <div className="lg:col-span-5 flex justify-center order-2 lg:order-2">
-                <div className="ad-demo-c-visual-wrap w-full max-w-[450px]" onClick={() => setModalActive(true)}>
-                  <div className="ad-demo-c-img-container">
-                    <img 
-                      src="/images/adzoop_auto_display.jpg" 
-                      alt="Adzoop LED screen display" 
-                      loading="lazy"
-                    />
-                    <div className="ad-demo-c-play-btn">
-                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                    <div className="ad-demo-c-overlay-label font-sans">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                      See it in action.
-                    </div>
+                <h1 className="hero-title text-4xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.1] font-display text-[#0B132B]">
+                  Transform Transit Into <br />
+                  <span className="text-[#0052FF]">Unskippable Recall</span>
+                </h1>
+
+                <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed font-sans">
+                  Smart cloud-connected 10&quot; HD LED screens mounted inside commercial auto-rickshaws. Delivering 12–15 minutes of captive, eye-level audience attention across Lucknow.
+                </p>
+
+                {/* Hero Feature Pills */}
+                <div className="grid grid-cols-2 gap-3 pt-2 max-w-lg text-left font-sans text-xs font-semibold text-slate-700">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                    <span className="text-[#0052FF] font-bold">👁️</span> 10–15 Min Dwell
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                    <span className="text-[#0052FF] font-bold">📡</span> GPS Telemetry
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                    <span className="text-[#25D366] font-bold">⚡</span> Cloud Sync
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
+                    <span className="text-[#0052FF] font-bold">💰</span> Starts ₹49/day
                   </div>
                 </div>
+
+                {/* Hero CTAs */}
+                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                  <a 
+                    href={whatsappCalculatorUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-sm font-sans flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 transition-all"
+                  >
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.719-1.465L0 24z"/></svg>
+                    Book Campaign Brief
+                  </a>
+
+                  <button
+                    onClick={() => setModalActive(true)}
+                    className="w-full sm:w-auto px-6 py-4 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-semibold text-sm font-sans transition-all flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-4 h-4 text-[#0052FF]" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Watch Live Demo
+                  </button>
+                </div>
+
               </div>
 
+              {/* Right Column: Unified Clean ROI & Budget Estimator Card */}
+              <div className="lg:col-span-6">
+                <div className="brand-card p-6 md:p-8 space-y-6 bg-white border border-slate-200 shadow-xl rounded-2xl">
+                  
+                  {/* Card Header */}
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                      <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider block">INTERACTIVE CALCULATOR</span>
+                      <h3 className="text-xl font-bold font-display text-[#0B132B]">Campaign ROI &amp; Budget Estimator</h3>
+                    </div>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-[#0052FF]/20 flex items-center justify-center text-[#0052FF] text-base font-black">
+                      ₹
+                    </div>
+                  </div>
 
+                  {/* Slider 1: Auto Count */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span className="text-slate-700">Target Autos Fleet:</span>
+                      <span className="text-[#0052FF] font-mono font-bold text-sm">{autoCount} Auto Rickshaws</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="5" 
+                      max="50" 
+                      step="5" 
+                      value={autoCount} 
+                      onChange={(e) => setAutoCount(Number(e.target.value))}
+                      className="custom-brand-slider"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                      <span>5 Autos</span>
+                      <span>25 Autos</span>
+                      <span>50 Autos</span>
+                    </div>
+                  </div>
+
+                  {/* Slider 2: Duration */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span className="text-slate-700">Campaign Duration:</span>
+                      <span className="text-[#0052FF] font-mono font-bold text-sm">{campaignDays} Days</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="7" 
+                      max="30" 
+                      step="1" 
+                      value={campaignDays} 
+                      onChange={(e) => setCampaignDays(Number(e.target.value))}
+                      className="custom-brand-slider"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                      <span>7 Days</span>
+                      <span>14 Days</span>
+                      <span>30 Days</span>
+                    </div>
+                  </div>
+
+                  {/* Live Metric Cards */}
+                  <div className="grid grid-cols-2 gap-4 pt-2">
+                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                      <span className="text-[11px] text-slate-500 font-mono uppercase block">Estimated Impressions</span>
+                      <span className="text-2xl font-black font-display text-[#0052FF]">{totalImpressions}</span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                      <span className="text-[11px] text-slate-500 font-mono uppercase block">Rate / Auto / Day</span>
+                      <span className="text-2xl font-black font-display text-[#0052FF]">₹{currentRate}</span>
+                    </div>
+                  </div>
+
+                  {/* Total Budget Result Bar */}
+                  <div className="p-4 rounded-xl bg-[#0B132B] text-white flex items-center justify-between shadow-lg">
+                    <div>
+                      <span className="text-xs text-slate-400 font-mono uppercase block">Total Campaign Budget</span>
+                      <span className="text-2xl font-black font-display text-white">₹{totalBudget.toLocaleString("en-IN")}</span>
+                    </div>
+                    <a 
+                      href={whatsappCalculatorUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="px-5 py-3 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs font-sans transition-all shadow-md"
+                    >
+                      Reserve Fleet →
+                    </a>
+                  </div>
+
+                </div>
+              </div>
 
             </div>
           </div>
         </section>
 
-        {/* ═══ MAP SECTION ═══ */}
-        <section className="ad-map-section" id="route-map">
-          <div className="ad-map-container">
-            <div className="ad-map-header">
-              <div className="ad-map-badge font-sans">
-                <div className="ad-map-live-dot" /> LIVE ACROSS LUCKNOW
-              </div>
-              <h2 className="ad-map-h2 font-display">See Your Brand Move</h2>
-              <p className="ad-map-subtitle font-sans">
-                Our network of smart transit vehicles traverses high-footfall business districts and commuter corridors across Lucknow, ensuring continuous daily impressions.
-              </p>
-            </div>
-
-            <div className="ad-map-visual">
-              <div className="ad-map-svg-wrap">
-                <svg viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <path id="route1" d="M 600,150 C 450,200 400,290 350,280 C 200,260 150,260 80,280"></path>
-                    <path id="route2" d="M 850,450 C 800,450 750,430 750,400 C 750,320 680,300 600,300 C 550,300 500,250 450,200"></path>
-                    <path id="route3" d="M 600,300 C 600,300 650,200 600,150 C 500,150 450,120 300,120"></path>
-                  </defs>
-
-                  <path d="M -50,80 Q 250,120 550,80 T 1050,100 L 1050,0 L -50,0 Z" fill="#1e293b" opacity="0.2"></path>
-                  <text x="500" y="45" fill="#475569" fontFamily="Inter" fontSize="18" fontWeight="700" letterSpacing="8" textAnchor="middle" opacity="0.3">GOMTI RIVER</text>
-
-                  <use href="#route1" className="map-road"></use>
-                  <use href="#route2" className="map-road"></use>
-                  <use href="#route3" className="map-road"></use>
-
-                  <text className="vehicle-auto">🛺
-                    <animateMotion dur="14s" repeatCount="indefinite">
-                      <mpath href="#route1"></mpath>
-                    </animateMotion>
-                  </text>
-
-                  <text className="vehicle-auto">🛺
-                    <animateMotion dur="18s" begin="6s" repeatCount="indefinite">
-                      <mpath href="#route1"></mpath>
-                    </animateMotion>
-                  </text>
-
-                  <text className="vehicle-auto">🛺
-                    <animateMotion dur="13s" repeatCount="indefinite">
-                      <mpath href="#route2"></mpath>
-                    </animateMotion>
-                  </text>
-
-                  <text className="vehicle-auto">🛺
-                    <animateMotion dur="16s" begin="5s" repeatCount="indefinite">
-                      <mpath href="#route2"></mpath>
-                    </animateMotion>
-                  </text>
-
-                  <text className="vehicle-auto">🛺
-                    <animateMotion dur="11s" repeatCount="indefinite">
-                      <mpath href="#route3"></mpath>
-                    </animateMotion>
-                  </text>
-
-                  {/* Pins mapping for Lucknow */}
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="80" cy="280"></circle>
-                    <circle className="pin-core" r="4" cx="80" cy="280"></circle>
-                    <text x="80" y="266" className="pin-label-text">Kakori</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="200" cy="260"></circle>
-                    <circle className="pin-core" r="4" cx="200" cy="260"></circle>
-                    <text x="200" y="246" className="pin-label-text">Aminabad</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="300" cy="120"></circle>
-                    <circle className="pin-core" r="4" cx="300" cy="120"></circle>
-                    <text x="300" y="106" className="pin-label-text">Chowk</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="350" cy="280"></circle>
-                    <circle className="pin-core" r="4" cx="350" cy="280"></circle>
-                    <text x="350" y="300" className="pin-label-text">Mahanagar</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="450" cy="200"></circle>
-                    <circle className="pin-core" r="4" cx="450" cy="200"></circle>
-                    <text x="450" y="186" className="pin-label-text">Aliganj</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="600" cy="150"></circle>
-                    <circle className="pin-core" r="4" cx="600" cy="150"></circle>
-                    <text x="600" y="136" className="pin-label-text">Hazratganj</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="600" cy="300"></circle>
-                    <circle className="pin-core" r="4" cx="600" cy="300"></circle>
-                    <text x="600" y="320" className="pin-label-text">Charbagh</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="750" cy="320"></circle>
-                    <circle className="pin-core" r="4" cx="750" cy="320"></circle>
-                    <text x="750" y="306" className="pin-label-text">Gomti Nagar</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="750" cy="400"></circle>
-                    <circle className="pin-core" r="4" cx="750" cy="400"></circle>
-                    <text x="750" y="420" className="pin-label-text">Alambagh</text>
-                  </g>
-
-                  <g className="map-pin">
-                    <circle className="pin-pulse" r="10" cx="850" cy="450"></circle>
-                    <circle className="pin-core" r="4" cx="850" cy="450"></circle>
-                    <text x="850" y="436" className="pin-label-text">Indira Nagar</text>
-                  </g>
-
-                </svg>
-              </div>
-            </div>
-
-            <div className="ad-map-footer font-sans">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              Your brand travels where the city moves.
-            </div>
-
+        {/* ═══ 2. CLIENT BRAND MARQUEE ═══ */}
+        <section className="py-8 border-y border-slate-200 bg-slate-50/60 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 mb-4 flex items-center gap-3">
+            <span className="status-dot-brand" />
+            <span className="text-xs font-mono font-bold tracking-widest text-slate-500 uppercase">TRUSTED BY 50+ LUCKNOW BRANDS &amp; RETAIL OUTLETS</span>
           </div>
-        </section>
-
-        {/* ═══ CLIENT LOGO SECTION ═══ */}
-        <section className="ad-drag-banner">
-          <p className="ad-drag-text font-sans">
-            Adzoop&apos;s smart on-road media network is trusted by <strong>50+ top brands</strong> and local retail businesses, delivering thousands of daily impressions and executing high-impact campaigns across Lucknow.
-          </p>
-          <div className="ad-drag-marquee">
-            <div className="ad-drag-track animate-marquee">
-              {[...clientBrands, ...clientBrands].map((brand, idx) => (
-                <div key={idx} className="ad-drag-logo-box font-display font-bold text-xs tracking-wider text-text-grey">
+          <div className="relative w-full overflow-hidden">
+            <div className="animate-marquee flex gap-8">
+              {[...clientBrands, ...clientBrands, ...clientBrands].map((brand, idx) => (
+                <div 
+                  key={idx} 
+                  className="px-6 py-3 rounded-xl bg-white border border-slate-200 text-xs font-bold font-mono tracking-wider text-slate-700 whitespace-nowrap shadow-xs hover:border-[#0052FF]/50 hover:text-[#0052FF] transition-all"
+                >
                   {brand}
                 </div>
               ))}
@@ -265,316 +251,319 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ PROBLEM → SOLUTION SECTION ═══ */}
-        <section className="ad-ps-light-section">
-          <span className="ad-ps-light-badge font-sans">Problem → Solution</span>
-          <h2 className="ad-ps-light-h2 font-display">Why Traditional Advertising Fails</h2>
-          <p className="ad-ps-light-subtitle font-sans">
-            Traditional media channels are cluttered and skipped. Adzoop places your brand at eye-level inside Lucknow&apos;s transit fleet where commuter attention is naturally focused.
-          </p>
-
-          <div className="ad-ps-light-grid">
+        {/* ═══ 3. LUCKNOW FLEET RADAR SECTION ═══ */}
+        <section className="px-6 py-20 bg-white relative" id="route-map">
+          <div className="max-w-7xl mx-auto space-y-12">
             
-            {/* The Problem */}
-            <div className="ad-ps-light-card ad-ps-light-card-red">
-              <div className="ad-ps-light-card-header font-sans">
-                <span className="ad-ps-light-icon-red">✕</span>
-                <span className="ad-ps-light-card-label ad-ps-light-label-red">The Problem</span>
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-[#0052FF]/30 text-xs font-mono text-[#0052FF]">
+                <span className="w-2 h-2 rounded-full bg-[#0052FF] animate-ping" />
+                <span>LIVE TELEMETRY &amp; CORRIDORS</span>
               </div>
-              <h3 className="ad-ps-light-card-title font-display">Traditional ads are ignored or forgotten.</h3>
-              
-              <div className="ad-ps-light-list font-sans">
-                <div className="ad-ps-light-list-item">
-                  <span className="ad-ps-light-list-icon">✕</span>
-                  <div className="ad-ps-light-list-text">
-                    <h4>Traditional ads get filtered out.</h4>
-                    <p>Modern consumers ignore static banners, paper flyers, and crowded brochures.</p>
-                  </div>
-                </div>
-                <div className="ad-ps-light-list-item">
-                  <span className="ad-ps-light-list-icon">✕</span>
-                  <div className="ad-ps-light-list-text">
-                    <h4>Digital ads are skipped or blocked.</h4>
-                    <p>Ad blockers, premium tiers, and 5-second skip triggers limit online visibility.</p>
-                  </div>
-                </div>
-                <div className="ad-ps-light-list-item">
-                  <span className="ad-ps-light-list-icon">✕</span>
-                  <div className="ad-ps-light-list-text">
-                    <h4>Out-of-home ads pass by too quickly.</h4>
-                    <p>High-speed billboards get only a brief glance before vanishing from view.</p>
-                  </div>
-                </div>
-              </div>
-
-              <img 
-                src="/images/adzoop_auto_display.jpg" 
-                alt="Adzoop LED Screen display" 
-                className="ad-ps-light-problem-img"
-                loading="lazy"
-              />
-            </div>
-
-            {/* Glowing Arrow */}
-            <div className="ad-ps-light-center">
-              <div className="ad-ps-light-arrow-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </div>
-            </div>
-
-            {/* The Solution */}
-            <div className="ad-ps-light-card ad-ps-light-card-green">
-              <div className="ad-ps-light-card-header font-sans">
-                <span className="ad-ps-light-icon-green">✓</span>
-                <span className="ad-ps-light-card-label ad-ps-light-label-green">The Solution</span>
-              </div>
-              <h3 className="ad-ps-light-card-title font-display">The Adzoop Edge.</h3>
-
-              <div className="ad-ps-light-green-content">
-                <div className="ad-ps-light-green-text font-sans">
-                  <div className="ad-ps-light-list-item">
-                    <span className="ad-ps-light-list-icon-green font-bold">✓</span>
-                    <div className="ad-ps-light-list-text">
-                      <h4>Eye-level LED displays on autos</h4>
-                      <p>Placed directly in the passenger cabin, making them impossible to miss.</p>
-                    </div>
-                  </div>
-                  <div className="ad-ps-light-list-item">
-                    <span className="ad-ps-light-list-icon-green font-bold">✓</span>
-                    <div className="ad-ps-light-list-text">
-                      <h4>Moves through high-traffic areas all day</h4>
-                      <p>15+ hours of daily movement across Lucknow&apos;s busiest commercial hubs.</p>
-                    </div>
-                  </div>
-                  <div className="ad-ps-light-list-item">
-                    <span className="ad-ps-light-list-icon-green font-bold">✓</span>
-                    <div className="ad-ps-light-list-text">
-                      <h4>Starts at just ₹2,000/week per auto</h4>
-                      <p>High impressions and strong recall for a fraction of traditional billboard budgets.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="ad-ps-light-green-img-wrap hidden md:block">
-                  <img 
-                    src="/images/adzoop_auto_display.jpg" 
-                    alt="Adzoop Auto Display" 
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-
-              <div className="ad-ps-light-bonus-box font-sans">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-5 h-5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                <p>Starts at just <span className="text-[#10B981] font-bold">₹2,000/week</span> per auto.</p>
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* Bottom CTA Bar */}
-          <div className="ad-ps-light-bottom-bar font-sans">
-            <div className="ad-ps-light-bar-left">
-              <div className="ad-ps-light-bar-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-              </div>
-              <span>Tailored B2B Proposals</span>
-            </div>
-            <div className="ad-ps-light-bar-center">
-              Our specialists curate custom routes for maximum local target footprint.
-            </div>
-            <Link href="/contact" className="ad-ps-light-btn">
-              Book a Demo
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </Link>
-          </div>
-
-        </section>
-
-        {/* ═══ HOW IT WORKS SECTION ═══ */}
-        <section className="ad-hiw-light-section" id="how-it-works">
-          <h2 className="ad-hiw-light-h2 font-display">How Adzoop Works</h2>
-          <p className="ad-hiw-light-subtitle font-sans">
-            Simple. Intelligent. <span>Scalable.</span>
-          </p>
-
-          <div className="ad-hiw-light-grid">
-            
-            {/* Step 1 */}
-            <div className="ad-hiw-light-card">
-              <div className="ad-hiw-light-bg-number font-display">01</div>
-              <div className="ad-hiw-light-content font-sans">
-                <div className="ad-hiw-light-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                </div>
-                <span className="ad-hiw-light-step-label">Step 01</span>
-                <h3 className="ad-hiw-light-title font-display text-text-dark">High-Definition Displays</h3>
-                <p className="ad-hiw-light-desc leading-relaxed">
-                  We mount smart, high-brightness LED screens securely inside vended commercial auto-rickshaws.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="ad-hiw-light-card">
-              <div className="ad-hiw-light-bg-number font-display">02</div>
-              <div className="ad-hiw-light-content font-sans">
-                <div className="ad-hiw-light-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                </div>
-                <span className="ad-hiw-light-step-label">Step 02</span>
-                <h3 className="ad-hiw-light-title font-display text-text-dark">Cloud-Scheduled Campaigns</h3>
-                <p className="ad-hiw-light-desc leading-relaxed">
-                  Your creatives are deployed remotely on loop across selected high-traffic routes in Lucknow.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="ad-hiw-light-card">
-              <div className="ad-hiw-light-bg-number font-display">03</div>
-              <div className="ad-hiw-light-content font-sans">
-                <div className="ad-hiw-light-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                </div>
-                <span className="ad-hiw-light-step-label">Step 03</span>
-                <h3 className="ad-hiw-light-title font-display text-text-dark">High-Impact Recall</h3>
-                <p className="ad-hiw-light-desc leading-relaxed">
-                  Passengers and street-level crowds engage with your brand during active transit times, creating high recall.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-          <div className="ad-hiw-light-footer-text font-sans">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            No active efforts needed from your side. We manage content delivery remotely.
-          </div>
-        </section>
-
-        {/* ═══ WHY CHOOSE US SECTION ═══ */}
-        <section className="ad-why-c-section">
-          <div className="ad-why-c-top-badge font-sans">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3.5 h-3.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            ADS THAT CAN&apos;T BE SKIPPED
-          </div>
-          <h2 className="ad-why-c-h2 font-display">Why Choose Adzoop</h2>
-          <p className="ad-why-c-subtitle font-sans">
-            A smarter, more effective way to reach your audience where attention actually exists.
-          </p>
-
-          <div className="ad-why-c-grid font-sans">
-            
-            {/* Card 1 */}
-            <div className="ad-why-c-card">
-              <div className="ad-why-c-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              </div>
-              <h3 className="ad-why-c-card-title font-display">Extended Attention Span</h3>
-              <p className="ad-why-c-card-desc leading-relaxed">
-                Your message stays directly in front of passengers during their entire commute, ensuring high retention.
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Lucknow Transit Fleet Radar</h2>
+              <p className="text-sm text-slate-600 font-sans">
+                Our smart auto displays traverse high-density business districts and commuter routes daily. Select a corridor below to inspect live fleet metrics.
               </p>
             </div>
 
-            {/* Card 2 */}
-            <div className="ad-why-c-card">
-              <div className="ad-why-c-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              </div>
-              <h3 className="ad-why-c-card-title font-display">Route-Specific Targeting</h3>
-              <p className="ad-why-c-card-desc leading-relaxed">
-                Filter visibility by choosing commercial routes and markets that directly match your business profile.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="ad-why-c-card">
-              <div className="ad-why-c-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
-              </div>
-              <h3 className="ad-why-c-card-title font-display">Vetted Analytics &amp; GPS</h3>
-              <p className="ad-why-c-card-desc leading-relaxed">
-                Get real campaign logs showing exact vehicle run durations alongside physical photo and video verification logs.
-              </p>
-            </div>
-
-            {/* Card 4 */}
-            <div className="ad-why-c-card">
-              <div className="ad-why-c-icon-wrap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              </div>
-              <h3 className="ad-why-c-card-title font-display">Cost-Efficient Visibility</h3>
-              <p className="ad-why-c-card-desc leading-relaxed">
-                High local impressions and premium screen recall for a fraction of traditional hoarding media costs.
-              </p>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ═══ SEE YOUR AD IN ACTION (DEMO) ═══ */}
-        <section className="ad-demo-c-section">
-          <div className="ad-demo-c-container">
-            
-            {/* Left Column */}
-            <div className="ad-demo-c-content">
-              <div className="ad-demo-c-badge font-sans">
-                <div className="ad-demo-c-live-dot" /> LIVE DEMO
-              </div>
-              <h2 className="ad-demo-c-h2 font-display text-text-dark">See Your Ad in Action</h2>
-              <p className="ad-demo-c-subtitle font-sans text-text-grey text-left">
-                Experience how your advertisement appears inside autos exactly as your customers see it.
-              </p>
-              <div className="ad-demo-c-bonus-quote font-sans">
-                &quot;Vivid display, zero friction—exactly as your target audience experiences it.&quot;
-              </div>
-
-              <div className="ad-demo-c-list font-sans text-left">
-                <div className="ad-demo-c-list-item">
-                  <span className="ad-demo-c-list-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </span>
-                  <div className="ad-demo-c-list-text">
-                    Real-time ad display inside autos
-                    <span>Delivered on high-definition LED screens.</span>
-                  </div>
-                </div>
-                <div className="ad-demo-c-list-item">
-                  <span className="ad-demo-c-list-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </span>
-                  <div className="ad-demo-c-list-text">
-                    Captures attention for 10–15 minutes
-                    <span>Brand remains visible throughout the commute.</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="ad-demo-c-cta-wrap">
-                <button className="ad-demo-c-btn font-sans" onClick={() => setModalActive(true)}>
-                  View Live Campaign
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            {/* Corridor Selector Tabs */}
+            <div className="flex flex-wrap justify-center gap-2 font-sans text-xs font-semibold">
+              {LUCKNOW_CORRIDORS.map((corridor) => (
+                <button
+                  key={corridor.id}
+                  onClick={() => setActiveCorridor(corridor)}
+                  className={`px-4 py-2.5 rounded-xl border transition-all ${
+                    activeCorridor.id === corridor.id 
+                      ? "bg-[#0052FF] text-white border-[#0052FF] font-bold shadow-md scale-105" 
+                      : "bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0052FF]/30"
+                  }`}
+                >
+                  {corridor.name}
                 </button>
-              </div>
+              ))}
             </div>
 
-            {/* Right Column */}
-            <div className="flex justify-center">
-              <div className="ad-demo-c-visual-wrap w-full max-w-[450px]" onClick={() => setModalActive(true)}>
-                <div className="ad-demo-c-img-container">
-                  <img 
-                    src="/images/adzoop_campaign_demo.jpg" 
-                    alt="Adzoop LED screen demo" 
-                    loading="lazy"
-                  />
-                  <div className="ad-demo-c-play-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            {/* Active Corridor Card & Responsive Fleet Radar */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              {/* Left Column: Selected Corridor Detailed Info Card */}
+              <div className="lg:col-span-5 brand-card p-6 space-y-6 bg-white border border-slate-200 shadow-md">
+                <div className="space-y-1">
+                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">SELECTED CORRIDOR</span>
+                  <h3 className="text-2xl font-bold font-display text-[#0B132B]">{activeCorridor.name}</h3>
+                  <p className="text-xs text-slate-500">{activeCorridor.traffic}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <span className="text-[10px] text-slate-500 font-mono uppercase block">Active Autos</span>
+                    <span className="text-xl font-bold font-display text-[#0052FF]">{activeCorridor.autos} Rickshaws</span>
                   </div>
-                  <div className="ad-demo-c-overlay-label font-sans">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                    LIVE PREVIEW
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <span className="text-[10px] text-slate-500 font-mono uppercase block">Daily Impressions</span>
+                    <span className="text-xl font-bold font-display text-[#0052FF]">{activeCorridor.impressions}</span>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs font-sans">
+                  <div className="flex justify-between text-slate-700">
+                    <span>Passenger Dwell Time:</span>
+                    <span className="font-mono text-[#0052FF] font-bold">12–15 Minutes</span>
+                  </div>
+                  <div className="flex justify-between text-slate-700">
+                    <span>Screen Resolution:</span>
+                    <span className="font-mono text-slate-900 font-bold">1080p HD IPS</span>
+                  </div>
+                  <div className="flex justify-between text-slate-700">
+                    <span>Proof-of-Play Logging:</span>
+                    <span className="font-mono text-[#0052FF] font-bold">Live Cloud Sync</span>
+                  </div>
+                </div>
+
+                <a 
+                  href={`https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%20want%20to%20target%20the%20${encodeURIComponent(activeCorridor.name)}%20route.`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs font-sans flex items-center justify-center gap-2 transition-all shadow-md"
+                >
+                  Target This Route via WhatsApp →
+                </a>
+              </div>
+
+              {/* ═══ MOBILE MAP VIEW (block lg:hidden): Dedicated Clean White/Slate Mobile Radar Card ═══ */}
+              <div className="block lg:hidden lg:col-span-7 brand-card p-6 space-y-6 bg-white text-[#0B132B] border border-slate-200 shadow-xl">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#0052FF] animate-ping" />
+                    LIVE FLEET RADAR TRACKER
+                  </span>
+                  <span className="text-xs font-mono text-slate-400 font-bold">LUCKNOW CITY</span>
+                </div>
+
+                {/* Animated Rickshaw Transit Bar */}
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div className="flex justify-between items-center text-xs font-bold font-mono">
+                    <span className="text-[#0052FF]">{activeCorridor.name}</span>
+                    <span className="text-slate-500">Impression Velocity ⚡</span>
+                  </div>
+                  
+                  {/* Progress Line with Moving Auto */}
+                  <div className="relative w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-[#0052FF] w-3/4 rounded-full animate-pulse" />
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs font-mono text-slate-700">
+                    <span>🛺 Active Fleet: <strong className="text-[#0B132B]">{activeCorridor.autos} Autos</strong></span>
+                    <span className="text-[#0052FF]"><strong>{activeCorridor.impressions}</strong> views/day</span>
+                  </div>
+                </div>
+
+                {/* Touch Corridor Node Chips */}
+                <div className="space-y-2">
+                  <span className="text-xs font-mono text-slate-500 uppercase tracking-wider block font-bold">Tap Corridor to Inspect:</span>
+                  <div className="grid grid-cols-2 gap-2 text-xs font-bold font-sans">
+                    {LUCKNOW_CORRIDORS.map((cor) => {
+                      const isSel = activeCorridor.id === cor.id;
+                      return (
+                        <button
+                          key={cor.id}
+                          onClick={() => setActiveCorridor(cor)}
+                          className={`p-3 rounded-xl border text-left transition-all ${
+                            isSel 
+                              ? "bg-[#0052FF] text-white border-[#0052FF] shadow-md font-bold" 
+                              : "bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0052FF]/30"
+                          }`}
+                        >
+                          <span className={`text-[10px] block font-mono ${isSel ? "text-blue-100" : "text-slate-400"}`}>Corridor Node</span>
+                          {cor.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* ═══ DESKTOP MAP VIEW (hidden lg:flex): High-Resolution Clean SVG Canvas ═══ */}
+              <div className="hidden lg:flex lg:col-span-7 brand-card p-6 h-[420px] items-center justify-center relative overflow-hidden bg-[#F8FAFC] border border-slate-200 shadow-xl">
+                
+                <svg viewBox="0 0 1000 500" className="w-full h-full relative z-10">
+                  <defs>
+                    <linearGradient id="brandRouteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#0052FF" />
+                      <stop offset="100%" stopColor="#2563EB" />
+                    </linearGradient>
+
+                    <path id="heroRoute1" d="M 100 250 C 300 150, 450 350, 640 210 C 750 120, 840 260, 950 250"></path>
+                    <path id="heroRoute2" d="M 150 400 C 220 380, 380 240, 500 140 C 650 300, 750 400, 950 200"></path>
+                  </defs>
+
+                  {/* Gomti River Water Way */}
+                  <path d="M -50,70 Q 250,110 550,70 T 1050,90 L 1050,0 L -50,0 Z" fill="#E0F2FE" opacity="0.8"></path>
+                  <text x="500" y="40" fill="#0284C7" fontFamily="Inter" fontSize="12" fontWeight="800" letterSpacing="4" textAnchor="middle">GOMTI RIVER CORRIDOR</text>
+
+                  {/* Road Paths */}
+                  <use href="#heroRoute1" stroke="#E2E8F0" strokeWidth="22" strokeLinecap="round" fill="none"></use>
+                  <use href="#heroRoute1" stroke="url(#brandRouteGradient)" strokeWidth="8" strokeDasharray="12 10" fill="none" className="animate-pulse"></use>
+                  
+                  <use href="#heroRoute2" stroke="#E2E8F0" strokeWidth="22" strokeLinecap="round" fill="none"></use>
+                  <use href="#heroRoute2" stroke="url(#brandRouteGradient)" strokeWidth="8" strokeDasharray="12 10" fill="none" className="animate-pulse"></use>
+
+                  {/* Prominent Large Moving Auto-Rickshaws */}
+                  <g className="vehicle-auto" transform="translate(-20, -20)">
+                    <text fontSize="42" filter="drop-shadow(0px 4px 10px rgba(0, 82, 255, 0.4))">🛺
+                      <animateMotion dur="14s" repeatCount="indefinite">
+                        <mpath href="#heroRoute1"></mpath>
+                      </animateMotion>
+                    </text>
+                  </g>
+
+                  <g className="vehicle-auto" transform="translate(-20, -20)">
+                    <text fontSize="42" filter="drop-shadow(0px 4px 10px rgba(0, 82, 255, 0.4))">🛺
+                      <animateMotion dur="18s" begin="3s" repeatCount="indefinite">
+                        <mpath href="#heroRoute2"></mpath>
+                      </animateMotion>
+                    </text>
+                  </g>
+
+                  {/* Render ALL 6 Lucknow Corridor Markers with Crisp High-Contrast Badges */}
+                  {LUCKNOW_CORRIDORS.map((corridor) => {
+                    const isSelected = activeCorridor.id === corridor.id;
+                    const textWidth = corridor.name.length * 7.5 + 24;
+                    const isLeftAnchor = corridor.textAnchor === "end";
+                    const rectX = isLeftAnchor ? -(textWidth + 14) : 14;
+
+                    return (
+                      <g 
+                        key={corridor.id} 
+                        transform={`translate(${corridor.x}, ${corridor.y})`}
+                        className="cursor-pointer group"
+                        onClick={() => setActiveCorridor(corridor)}
+                      >
+                        {/* Selected Ping Ripple Aura */}
+                        {isSelected && (
+                          <circle r="22" fill="rgba(0, 82, 255, 0.25)" className="animate-ping"></circle>
+                        )}
+
+                        {/* Outer Pin Circle */}
+                        <circle 
+                          r={isSelected ? "10" : "8"} 
+                          fill={isSelected ? "#0052FF" : "#FFFFFF"} 
+                          stroke={isSelected ? "#0052FF" : "#0052FF"} 
+                          strokeWidth={isSelected ? "3.5" : "2.5"} 
+                          className="shadow-md transition-all"
+                        />
+
+                        {/* High-Contrast Badge Container */}
+                        <g transform={`translate(0, -12)`}>
+                          <rect 
+                            x={rectX}
+                            y="-12" 
+                            width={textWidth} 
+                            height="24" 
+                            rx="12" 
+                            fill={isSelected ? "#0052FF" : "#FFFFFF"} 
+                            stroke={isSelected ? "#0052FF" : "#CBD5E1"} 
+                            strokeWidth={isSelected ? "2" : "1.5"}
+                            className="shadow-lg transition-all"
+                          />
+
+                          <text 
+                            x={rectX + 12} 
+                            y="4" 
+                            fill={isSelected ? "#FFFFFF" : "#0B132B"} 
+                            fontSize="11" 
+                            fontWeight={isSelected ? "800" : "700"} 
+                            fontFamily="Inter, sans-serif"
+                          >
+                            {corridor.name}
+                          </text>
+                        </g>
+
+                      </g>
+                    );
+                  })}
+
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        {/* ═══ 4. ADZOOP SMART ECOSYSTEM (INTERACTIVE TABS) ═══ */}
+        <section className="px-6 py-20 bg-slate-50 border-y border-slate-200 relative" id="how-it-works">
+          <div className="max-w-7xl mx-auto space-y-12">
+            
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">PLATFORM ARCHITECTURE</span>
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">How Adzoop DOOH Works</h2>
+              <p className="text-sm text-slate-600 font-sans">
+                A seamless blend of automotive hardware, cloud media distribution, and verified proof-of-play metrics.
+              </p>
+            </div>
+
+            {/* Ecosystem Tabs */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[
+                { title: "01. Smart Hardware", desc: "10\" IPS HD Screens mounted inside auto cabins with automatic ignition sync." },
+                { title: "02. Cloud Scheduling", desc: "Deploy video & image creatives remotely across selected Lucknow corridors." },
+                { title: "03. GPS Geofencing", desc: "Filter campaign triggers based on commercial route coordinates." },
+                { title: "04. Proof-of-Play", desc: "Receive transparent daily playback count & compliance logs." },
+              ].map((tab, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setActiveEcosystemTab(idx)}
+                  className={`p-6 rounded-2xl border cursor-pointer transition-all ${
+                    activeEcosystemTab === idx
+                      ? "bg-white border-[#0052FF] shadow-lg shadow-blue-500/10"
+                      : "bg-white/60 border-slate-200 hover:border-slate-300"
+                  }`}
+                >
+                  <span className={`text-xs font-mono font-bold block mb-2 ${activeEcosystemTab === idx ? "text-[#0052FF]" : "text-slate-400"}`}>
+                    STEP 0{idx + 1}
+                  </span>
+                  <h4 className="text-base font-bold font-display text-[#0B132B] mb-1">{tab.title.split(". ")[1]}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans">{tab.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Active Tab Preview Window */}
+            <div className="brand-card p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white border border-slate-200">
+              <div className="lg:col-span-6 space-y-4">
+                <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">CAPABILITY HIGHLIGHT</span>
+                <h3 className="text-2xl font-bold font-display text-[#0B132B]">
+                  {activeEcosystemTab === 0 && "Automotive-Grade HD Screen Hardware"}
+                  {activeEcosystemTab === 1 && "Remote Cloud Creative Dispatch"}
+                  {activeEcosystemTab === 2 && "Hyper-Local Route Corridor Targeting"}
+                  {activeEcosystemTab === 3 && "Verifiable Proof-of-Play (PoP) Dashboard"}
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-sans">
+                  {activeEcosystemTab === 0 && "Built for tough transit conditions. High brightness IPS panels remain vivid even in full sunlight, turning on automatically when the auto engine starts."}
+                  {activeEcosystemTab === 1 && "No manual USB changes needed. Upload your video or graphics to our cloud dashboard and deploy updates across 50+ autos in minutes."}
+                  {activeEcosystemTab === 2 && "Target precise buyer demographics by choosing high-density commercial markets, university clusters, or intercity commuter corridors."}
+                  {activeEcosystemTab === 3 && "Complete accountability. Every ad play is registered with time-stamped logs and verified fleet run hours."}
+                </p>
+                <div className="pt-2">
+                  <a href={whatsappCalculatorUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-xs font-bold font-mono text-[#0052FF] hover:underline">
+                    Explore Technical Specs →
+                  </a>
+                </div>
+              </div>
+
+              <div className="lg:col-span-6 flex justify-center">
+                <div className="w-full max-w-[420px] rounded-2xl overflow-hidden border border-slate-200 shadow-xl relative group cursor-pointer" onClick={() => setModalActive(true)}>
+                  <img 
+                    src={activeEcosystemTab === 0 ? "/images/adzoop_auto_display.jpg" : activeEcosystemTab === 1 ? "/images/adzoop_campaign_demo.jpg" : activeEcosystemTab === 2 ? "/images/adzoop_driver_partner.jpg" : "/images/adzoop_team_group.jpg"} 
+                    alt="Adzoop feature showcase" 
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-80" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-sans font-bold text-white">
+                    <span>Click to launch video demo</span>
+                    <span className="w-8 h-8 rounded-full bg-[#0052FF] text-white flex items-center justify-center shadow-lg">▶</span>
                   </div>
                 </div>
               </div>
@@ -583,152 +572,309 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ GROW YOUR BUSINESS SECTION ═══ */}
-        <section className="ad-biz-section">
-          <div className="ad-biz-container">
+        {/* ═══ 5. COMPARISON MATRIX ═══ */}
+        <section className="px-6 py-20 bg-white relative">
+          <div className="max-w-7xl mx-auto space-y-12">
             
-            {/* Left Column */}
-            <div className="ad-biz-content text-left">
-              <h2 className="ad-biz-h2 font-display">Grow Your Business with Adzoop</h2>
-              <p className="ad-biz-subtitle font-sans text-text-grey">
-                Build high brand authority, trigger instant walk-ins, and capture local markets with Adzoop&apos;s unskippable transit media.
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">MEDIA COMPARISON</span>
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Why Adzoop Beats Traditional Media</h2>
+              <p className="text-sm text-slate-600 font-sans">
+                Stop wasting money on static billboards that pass by in 3 seconds or online ads that get skipped.
               </p>
-
-              <div className="ad-biz-points font-sans">
-                <div className="ad-biz-point">
-                  <div className="ad-biz-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                  </div>
-                  <div className="ad-biz-text">
-                    <h4>More Footfall</h4>
-                    <p>Attract more customers to your business through consistent on-road visibility.</p>
-                  </div>
-                </div>
-                <div className="ad-biz-point">
-                  <div className="ad-biz-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                  </div>
-                  <div className="ad-biz-text">
-                    <h4>Better Recall</h4>
-                    <p>Stay in your customer’s mind with ads that remain visible for longer.</p>
-                  </div>
-                </div>
-                <div className="ad-biz-point">
-                  <div className="ad-biz-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
-                  </div>
-                  <div className="ad-biz-text">
-                    <h4>Local Targeting</h4>
-                    <p>Reach your ideal audience in specific areas where your business operates.</p>
-                  </div>
-                </div>
-              </div>
-
-              <Link href="/contact" className="ad-biz-cta font-sans">
-                Start Your Campaign
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </Link>
             </div>
 
-            {/* Right Column */}
-            <div className="flex justify-center">
-              <div className="ad-biz-visual-wrap w-full max-w-[450px]">
-                <div className="ad-biz-img-container">
-                  <img 
-                    src="/images/adzoop_auto_display.jpg" 
-                    alt="Adzoop LED Screen inside Auto" 
-                    loading="lazy"
-                  />
-                  <div className="ad-biz-overlay font-sans">
-                    <div className="ad-biz-overlay-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <span className="ad-biz-overlay-text">15,000+ Daily impressions per auto</span>
+            {/* Desktop Table View (hidden on mobile) */}
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-slate-200">
+              <table className="w-full text-left border-collapse font-sans text-xs min-w-[700px]">
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-50 text-slate-500 font-mono text-[11px] uppercase">
+                    <th className="p-4">Advertising Channel</th>
+                    <th className="p-4">Attention Dwell</th>
+                    <th className="p-4">Skippability</th>
+                    <th className="p-4">Weekly Cost per 10k Reach</th>
+                    <th className="p-4 text-[#0052FF]">Proof of Play</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr className="bg-white">
+                    <td className="p-4 font-bold text-slate-700 flex items-center gap-2">
+                      <span className="text-red-500">✕</span> Traditional Billboards
+                    </td>
+                    <td className="p-4 text-slate-600">2–3 Seconds</td>
+                    <td className="p-4 text-slate-600">Easily Ignored</td>
+                    <td className="p-4 text-slate-600">₹25,000 – ₹50,000</td>
+                    <td className="p-4 text-slate-400 font-mono">None (Estimated)</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="p-4 font-bold text-slate-700 flex items-center gap-2">
+                      <span className="text-red-500">✕</span> Social / Video Ads
+                    </td>
+                    <td className="p-4 text-slate-600">3–5 Seconds</td>
+                    <td className="p-4 text-slate-600">Skipped via Button / AdBlock</td>
+                    <td className="p-4 text-slate-600">₹15,000 – ₹30,000</td>
+                    <td className="p-4 text-slate-500 font-mono">Digital Clicks Only</td>
+                  </tr>
+                  <tr className="bg-blue-50/60 border-2 border-[#0052FF]/40">
+                    <td className="p-4 font-bold text-[#0052FF] text-sm flex items-center gap-2">
+                      <span className="text-[#0052FF]">✓</span> Adzoop DOOH Transit
+                    </td>
+                    <td className="p-4 font-bold text-slate-900 text-sm">12–15 Minutes</td>
+                    <td className="p-4 font-bold text-[#0052FF]">Unskippable Eye-Level</td>
+                    <td className="p-4 font-bold text-[#0052FF]">₹2,000 – ₹5,000</td>
+                    <td className="p-4 font-bold text-[#0052FF] font-mono">100% Cloud GPS Logs</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Stacked Card View (block on mobile, hidden on md+) */}
+            <div className="block md:hidden space-y-4 font-sans text-xs">
+              
+              {/* Traditional Billboards Card */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <span className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                    <span className="text-red-500 font-bold">✕</span> Traditional Billboards
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-mono text-[10px]">Static</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-slate-600">
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Attention Dwell</span>
+                    <span className="font-semibold text-slate-800">2–3 Seconds</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Skippability</span>
+                    <span className="font-semibold text-slate-800">Easily Ignored</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Cost / 10k Reach</span>
+                    <span className="font-semibold text-slate-800">₹25,000 – ₹50,000</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Proof of Play</span>
+                    <span className="font-mono text-slate-500">None (Estimated)</span>
                   </div>
                 </div>
               </div>
+
+              {/* Social / Video Ads Card */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <span className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                    <span className="text-red-500 font-bold">✕</span> Social / Video Ads
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-mono text-[10px]">Digital</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-slate-600">
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Attention Dwell</span>
+                    <span className="font-semibold text-slate-800">3–5 Seconds</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Skippability</span>
+                    <span className="font-semibold text-slate-800">Skipped via Button</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Cost / 10k Reach</span>
+                    <span className="font-semibold text-slate-800">₹15,000 – ₹30,000</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">Proof of Play</span>
+                    <span className="font-mono text-slate-500">Digital Clicks Only</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Adzoop DOOH Transit Featured Card */}
+              <div className="p-5 rounded-2xl bg-blue-50/80 border-2 border-[#0052FF] space-y-3 shadow-lg relative">
+                <div className="absolute -top-3 right-4 px-3 py-0.5 rounded-full bg-[#0052FF] text-white font-bold text-[9px] font-mono tracking-wider uppercase shadow-xs">
+                  WINNER
+                </div>
+                <div className="flex items-center justify-between border-b border-blue-200 pb-2">
+                  <span className="font-bold text-[#0052FF] text-sm flex items-center gap-1.5">
+                    <span className="text-[#0052FF] font-bold">✓</span> Adzoop DOOH Transit
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-slate-700">
+                  <div>
+                    <span className="text-[10px] text-slate-500 block uppercase">Attention Dwell</span>
+                    <span className="font-black text-[#0052FF] text-sm">12–15 Minutes</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block uppercase">Skippability</span>
+                    <span className="font-bold text-[#0052FF]">Unskippable</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block uppercase">Cost / 10k Reach</span>
+                    <span className="font-black text-[#0052FF] text-sm">₹2,000 – ₹5,000</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 block uppercase">Proof of Play</span>
+                    <span className="font-mono font-bold text-[#0052FF]">100% Cloud GPS</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
           </div>
         </section>
 
-        {/* ═══ DRIVER PARTNER (PILOTS) SECTION ═══ */}
-        <section className="ad-pilot-c-section" id="pilot">
-          <div className="ad-pilot-c-container">
+        {/* ═══ 6. PRICING PACKAGES ═══ */}
+        <section className="px-6 py-20 bg-slate-50 border-t border-slate-200 relative" id="pricing">
+          <div className="max-w-7xl mx-auto space-y-12">
             
-            {/* Left Column */}
-            <div className="ad-pilot-c-content text-left">
-              <div className="ad-pilot-c-badge font-sans">
-                <div className="ad-pilot-c-live-dot" /> 500+ ACTIVE DRIVERS
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">TRANSPARENT PRICING</span>
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Campaign Plans Built for Growth</h2>
+              <p className="text-sm text-slate-600 font-sans">
+                Choose a package that matches your advertising footprint across Lucknow.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 font-sans">
+              
+              {/* Tier 1 */}
+              <div className="brand-card p-6 space-y-6 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className="text-xs font-mono text-slate-400 font-bold uppercase">ENTRY LEVEL</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Hyperlocal Lite</h3>
+                  <p className="text-xs text-slate-600">Best for local retail outlets &amp; single store launches.</p>
+                  <div className="pt-2">
+                    <span className="text-3xl font-black font-display text-[#0B132B]">₹79</span>
+                    <span className="text-xs text-slate-500"> / auto / day</span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Up to 5 Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 1 Selected Corridor</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Weekly Play Logs</li>
+                  </ul>
+                </div>
+                <Link href="/contact?package=hyperlocal-lite" className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs text-center block transition-all">
+                  Book Plan →
+                </Link>
               </div>
-              <h2 className="ad-pilot-c-h2 font-display text-text-dark">Drive &amp; Earn More with Adzoop</h2>
-              <p className="ad-pilot-c-subtitle font-sans text-text-grey">
-                Join Lucknow&apos;s largest smart transit driver network. Turn your passenger rides into guaranteed monthly passive income with simple and reliable earning opportunities.
+
+              {/* Tier 2 */}
+              <div className="brand-card p-6 space-y-6 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">GROWTH</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Market Penetrator</h3>
+                  <p className="text-xs text-slate-600">Ideal for expanding chains &amp; multi-branch services.</p>
+                  <div className="pt-2">
+                    <span className="text-3xl font-black font-display text-[#0052FF]">₹69</span>
+                    <span className="text-xs text-slate-500"> / auto / day</span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 10–20 Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Up to 3 Corridors</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Dedicated Account Desk</li>
+                  </ul>
+                </div>
+                <Link href="/contact?package=market-penetrator" className="w-full py-3.5 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs text-center block transition-all shadow-md">
+                  Book Plan →
+                </Link>
+              </div>
+
+              {/* Tier 3 (Featured) */}
+              <div className="brand-card p-6 space-y-6 flex flex-col justify-between border-2 border-[#0052FF] relative shadow-[0_4px_25px_rgba(0,82,255,0.2)]">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[#0052FF] text-white font-black text-[10px] font-mono tracking-wider uppercase shadow-md">
+                  MOST POPULAR
+                </div>
+                <div className="space-y-3">
+                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">RECOMMENDED</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">City Domination</h3>
+                  <p className="text-xs text-slate-600">Maximum brand authority &amp; footfall across Lucknow.</p>
+                  <div className="pt-2">
+                    <span className="text-3xl font-black font-display text-[#0052FF]">₹59</span>
+                    <span className="text-xs text-slate-500"> / auto / day</span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 25–40 Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> All Lucknow Corridors</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Real-Time GPS Telemetry</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Creative Design Support</li>
+                  </ul>
+                </div>
+                <Link href="/contact?package=city-domination" className="w-full py-3.5 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs text-center block transition-all shadow-lg">
+                  Book Plan →
+                </Link>
+              </div>
+
+              {/* Tier 4 */}
+              <div className="brand-card p-6 space-y-6 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className="text-xs font-mono text-slate-400 font-bold uppercase">ENTERPRISE</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Enterprise Network</h3>
+                  <p className="text-xs text-slate-600">Large-scale regional campaigns &amp; custom fleets.</p>
+                  <div className="pt-2">
+                    <span className="text-3xl font-black font-display text-[#0B132B]">₹49</span>
+                    <span className="text-xs text-slate-500"> / auto / day</span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 50+ Custom Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Priority Loop Scheduling</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Custom API Telemetry</li>
+                  </ul>
+                </div>
+                <Link href="/contact?package=enterprise-network" className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs text-center block transition-all">
+                  Contact Enterprise →
+                </Link>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        {/* ═══ 7. DRIVER PARTNER PORTAL (PILOTS) ═══ */}
+        <section className="px-6 py-20 bg-white relative" id="pilot">
+          <div className="max-w-7xl mx-auto brand-card p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-blue-50/30 border border-slate-200">
+            
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-[#0052FF]/30 text-xs font-mono text-[#0052FF]">
+                <span className="status-dot-brand" />
+                <span>500+ ONBOARDED DRIVER PARTNERS</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">
+                Drive &amp; Earn Passive Income with Adzoop
+              </h2>
+
+              <p className="text-sm text-slate-600 leading-relaxed font-sans">
+                Join Lucknow&apos;s largest smart transit driver network. Turn your auto-rickshaw rides into guaranteed monthly earnings. Zero extra effort required from your side.
               </p>
 
-              <div className="ad-pilot-c-benefits font-sans">
-                <div className="ad-pilot-c-benefit-card">
-                  <div className="ad-pilot-c-icon">🛺</div>
-                  <h4>Extra Income</h4>
-                  <p>Earn additional money by displaying ads inside your auto.</p>
+              <div className="grid grid-cols-2 gap-4 text-xs font-sans font-semibold">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
+                  <span className="text-[#0052FF] font-bold block mb-1">💰 Extra Monthly Income</span>
+                  <span className="text-slate-500">Guaranteed passive payout directly to your bank.</span>
                 </div>
-                <div className="ad-pilot-c-benefit-card">
-                  <div className="ad-pilot-c-icon">🛡️</div>
-                  <h4>Insurance Support</h4>
-                  <p>Access insurance benefits after completing required durations.</p>
-                </div>
-                <div className="ad-pilot-c-benefit-card">
-                  <div className="ad-pilot-c-icon">⚙️</div>
-                  <h4>Simple Process</h4>
-                  <p>Easy onboarding and minimal effort to start earning.</p>
-                </div>
-                <div className="ad-pilot-c-benefit-card">
-                  <div className="ad-pilot-c-icon">⏱️</div>
-                  <h4>Flexible Work</h4>
-                  <p>Continue regular driving while earning passive income.</p>
+                <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
+                  <span className="text-[#0052FF] font-bold block mb-1">🛡️ Insurance Benefits</span>
+                  <span className="text-slate-500">Access driver partner welfare benefits after 90 days.</span>
                 </div>
               </div>
 
               <a 
-                href="https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%20want%20to%20join%20as%20a%20driver%20partner."
-                target="_blank"
+                href="https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%20am%20an%20auto%20driver%20in%20Lucknow%20and%20want%20to%20join%20as%20a%20partner."
+                target="_blank" 
                 rel="noopener noreferrer"
-                className="ad-pilot-c-cta font-sans"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs font-sans shadow-lg transition-all"
               >
-                Join as a Partner
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                Join as Driver Partner via WhatsApp →
               </a>
             </div>
 
-            {/* Right Column (Driver Photo Gallery) */}
-            <div className="ad-pilot-c-gallery">
-              <div className="ad-pilot-c-col">
-                <div className="ad-pilot-c-photo-wrap ad-pilot-c-tall">
-                  <img 
-                    src="/images/adzoop_driver_partner.jpg" 
-                    alt="Adzoop Driver Partner" 
-                    loading="lazy"
-                  />
-                  <div className="ad-pilot-c-overlay font-sans font-bold">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-3.5 h-3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    Lucknow Pilot
-                  </div>
-                </div>
-              </div>
-              <div className="ad-pilot-c-col">
-                <div className="ad-pilot-c-photo-wrap ad-pilot-c-short">
-                  <img 
-                    src="/images/adzoop_team_group.jpg" 
-                    alt="Driver Team" 
-                    loading="lazy"
-                  />
-                </div>
-                <div className="ad-pilot-c-photo-wrap ad-pilot-c-short">
-                  <img 
-                    src="/images/adzoop_driver_partner.jpg" 
-                    alt="Partner onboarding" 
-                    loading="lazy"
-                  />
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="w-full max-w-[380px] rounded-2xl overflow-hidden border border-slate-200 shadow-xl relative">
+                <img src="/images/adzoop_driver_partner.jpg" alt="Adzoop Driver Partner" className="w-full h-80 object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-white/95 backdrop-blur-md border border-slate-200 text-xs font-mono">
+                  <span className="text-[#0052FF] font-bold block">Lucknow Driver Onboarding</span>
+                  <span className="text-slate-600">Free hardware installation at our hub.</span>
                 </div>
               </div>
             </div>
@@ -736,66 +882,29 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ CTA SECTION ═══ */}
-        <section className="ad-cta-c-section">
-          <div className="ad-cta-c-glow" />
-          <div className="ad-cta-c-container">
-            <div className="ad-cta-c-badge font-sans">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              ADS THAT CAN&apos;T BE SKIPPED
+        {/* ═══ 8. FAQ SECTION ═══ */}
+        <section className="px-6 py-20 bg-slate-50 border-t border-slate-200 relative" id="faq">
+          <div className="max-w-4xl mx-auto space-y-12">
+            
+            <div className="text-center space-y-3">
+              <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">FREQUENTLY ASKED QUESTIONS</span>
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Got Questions? We Have Answers.</h2>
             </div>
-            <h2 className="ad-cta-c-h2 font-display">
-              Your customers are already inside the auto. <br className="hidden md:inline" />
-              Let&apos;s make sure they see your brand.
-            </h2>
-            <p className="ad-cta-c-subtitle font-sans">
-              Stop wasting money on ads that get ignored. Start reaching real customers where attention actually exists.
-            </p>
-            <div>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="ad-cta-c-btn-primary font-sans">
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.719-1.465L0 24z"/></svg>
-                Chat on WhatsApp
-              </a>
-            </div>
-            <div className="ad-cta-c-trust font-sans">
-              <div className="ad-cta-c-avatars">
-                <div className="ad-cta-c-avatar">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div className="ad-cta-c-avatar">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                <div className="ad-cta-c-avatar">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-              </div>
-              <span>Trusted by 500+ autos across Lucknow.</span>
-            </div>
-          </div>
-        </section>
 
-        {/* ═══ FAQ SECTION ═══ */}
-        <section className="ad-faq-fw-section" id="faq">
-          <div className="ad-faq-fw-container">
-            <h2 className="ad-faq-fw-h2 font-display text-text-dark">Frequently Asked Questions</h2>
-            <p className="ad-faq-fw-subtitle font-sans">
-              Discover how Adzoop’s LED auto advertising works, how it helps local businesses grow, and why it is one of the most effective outdoor advertising solutions in India.
-            </p>
-
-            <div className="ad-faq-fw-list font-sans">
+            <div className="space-y-4 font-sans text-xs">
               {FAQ_DATA.map((faq, idx) => (
-                <div key={idx} className={`ad-faq-fw-item ${activeFaq === idx ? "active" : ""}`}>
-                  <button className="ad-faq-fw-question" onClick={() => toggleFaq(idx)}>
-                    {faq.q}
-                    <div className="ad-faq-fw-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                    </div>
-                  </button>
-                  <div className="ad-faq-fw-answer-wrapper">
-                    <div className="ad-faq-fw-answer">
-                      <div className="ad-faq-fw-answer-inner leading-relaxed">
-                        {faq.a}
-                      </div>
+                <div 
+                  key={idx} 
+                  className="brand-card p-5 rounded-2xl cursor-pointer transition-all border border-slate-200 bg-white"
+                  onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                >
+                  <div className="flex justify-between items-center text-sm font-bold text-[#0B132B]">
+                    <span>{faq.q}</span>
+                    <span className="text-[#0052FF] font-mono text-lg">{activeFaq === idx ? "−" : "+"}</span>
+                  </div>
+                  <div className={`faq-answer-wrapper ${activeFaq === idx ? "active" : ""}`}>
+                    <div className="faq-answer-inner pt-3 text-slate-600 leading-relaxed">
+                      {faq.a}
                     </div>
                   </div>
                 </div>
@@ -806,9 +915,10 @@ export default function HomePage() {
         </section>
 
       </main>
+
       <Footer />
 
-      {/* Video Modal component */}
+      {/* Video Modal Component */}
       <div className={`ad-video-modal ${modalActive ? "active" : ""}`} onClick={() => setModalActive(false)}>
         <div className="ad-modal-content" onClick={(e) => e.stopPropagation()}>
           <button className="ad-modal-close" onClick={() => setModalActive(false)}>×</button>
