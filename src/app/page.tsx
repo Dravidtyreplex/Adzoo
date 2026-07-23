@@ -4,36 +4,37 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Link from "next/link";
+import { getDailyRate, getPotentialCustomers } from "../utils/pricing";
 
 const LUCKNOW_CORRIDORS = [
-  { id: "hazratganj", name: "Hazratganj Hub", autos: 120, impressions: "45,000+", traffic: "High Retail & Commercial Footfall", x: 640, y: 210, textAnchor: "start" },
-  { id: "gomti-nagar", name: "Gomti Nagar Corridor", autos: 150, impressions: "60,000+", traffic: "IT Parks & Corporate Hubs", x: 840, y: 260, textAnchor: "start" },
-  { id: "aminabad", name: "Aminabad Market", autos: 90, impressions: "38,000+", traffic: "Dense Wholesale Shopping District", x: 380, y: 240, textAnchor: "end" },
-  { id: "charbagh", name: "Charbagh Transit Hub", autos: 110, impressions: "52,000+", traffic: "Railway Station & Commuter Traffic", x: 480, y: 350, textAnchor: "start" },
-  { id: "alambagh", name: "Alambagh Bus Terminal", autos: 85, impressions: "32,000+", traffic: "Intercity Commuter Intersection", x: 220, y: 380, textAnchor: "end" },
-  { id: "aliganj", name: "Aliganj Institutional Zone", autos: 75, impressions: "28,000+", traffic: "Colleges & Coaching Hubs", x: 500, y: 140, textAnchor: "start" },
+  { id: "hazratganj", name: "Hazratganj Hub", autos: 120, potentialCustomers: "3,600 / day", traffic: "High Retail & Commercial Footfall", x: 640, y: 210, textAnchor: "start" },
+  { id: "gomti-nagar", name: "Gomti Nagar Corridor", autos: 150, potentialCustomers: "4,500 / day", traffic: "IT Parks & Corporate Hubs", x: 840, y: 260, textAnchor: "start" },
+  { id: "aminabad", name: "Aminabad Market", autos: 90, potentialCustomers: "2,700 / day", traffic: "Dense Wholesale Shopping District", x: 380, y: 240, textAnchor: "end" },
+  { id: "charbagh", name: "Charbagh Transit Hub", autos: 110, potentialCustomers: "3,300 / day", traffic: "Railway Station & Commuter Traffic", x: 480, y: 350, textAnchor: "start" },
+  { id: "alambagh", name: "Alambagh Bus Terminal", autos: 85, potentialCustomers: "2,550 / day", traffic: "Intercity Commuter Intersection", x: 220, y: 380, textAnchor: "end" },
+  { id: "aliganj", name: "Aliganj Institutional Zone", autos: 75, potentialCustomers: "2,250 / day", traffic: "Colleges & Coaching Hubs", x: 500, y: 140, textAnchor: "start" },
 ];
 
 const FAQ_DATA = [
   { 
-    q: "How does Adzoop DOOH auto advertising work?", 
-    a: "We mount cloud-connected 10-inch HD LED screens inside commercial auto-rickshaws. Your ad plays on continuous loop directly at eye-level to passengers during their 12–15 minute commutes across Lucknow." 
+    q: "How does Adzoop auto rickshaw branding work?", 
+    a: "We mount high-quality illuminated backlit panels on commercial auto-rickshaws. Your brand creative is prominently displayed at eye-level to passengers, pedestrians, and vehicular traffic along Lucknow's busiest routes." 
   },
   { 
-    q: "Why is auto LED screen media better than static billboards?", 
-    a: "Billboards are expensive, static, and passed by in seconds. Adzoop screens deliver 12–15 minutes of unskippable, captive attention inside moving vehicles for a fraction of outdoor billboard rates." 
+    q: "Why is auto rickshaw backlit panel advertising effective?", 
+    a: "Static roadside billboards are expensive and quickly passed by. Adzoop backlit auto panels travel through dense markets and high-traffic corridors, delivering 15–20 minutes of steady attention directly to potential customers." 
   },
   { 
-    q: "Do I get verified proof that my ads were played?", 
-    a: "Yes. Our cloud platform logs exact screen play count, active hours, and vehicle GPS route compliance, giving you 100% transparent proof-of-play (PoP) reports." 
+    q: "Do I get proof of installation and placement?", 
+    a: "Yes. Our team conducts on-ground inspections and provides photo/video audit reports confirming that every single auto rickshaw panel is properly mounted and active." 
   },
   { 
     q: "Can I choose specific routes in Lucknow?", 
-    a: "Absolutely. You can select target commercial zones like Hazratganj, Gomti Nagar, Aminabad, or Charbagh to align visibility with your buyer demographic." 
+    a: "Yes. You can select target commercial zones like Hazratganj, Gomti Nagar, Aminabad, or Charbagh to align visibility with your target audience." 
   },
   { 
     q: "How do auto drivers benefit from Adzoop?", 
-    a: "Driver partners receive guaranteed monthly passive payouts simply for keeping the screen running during their daily driving hours, boosting driver livelihood." 
+    a: "Driver partners receive guaranteed monthly payouts for maintaining the backlit panel on their auto, supporting local drivers while promoting your brand." 
   }
 ];
 
@@ -43,21 +44,14 @@ export default function HomePage() {
   const [activeEcosystemTab, setActiveEcosystemTab] = useState(0);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  // ROI Calculator State
-  const [autoCount, setAutoCount] = useState<number>(10);
+  // ROI Calculator State (5 to 300 Autos)
+  const [autoCount, setAutoCount] = useState<number>(20);
   const [campaignDays, setCampaignDays] = useState<number>(14);
 
-  // Dynamic Rate Calculations
-  const getDailyRate = (count: number) => {
-    if (count >= 30) return 49;
-    if (count >= 20) return 59;
-    if (count >= 10) return 69;
-    return 79;
-  };
-
+  // Exact Dynamic Rate & Potential Customer Calculations
   const currentRate = getDailyRate(autoCount);
   const totalBudget = autoCount * campaignDays * currentRate;
-  const totalImpressions = (autoCount * campaignDays * 15000).toLocaleString("en-IN");
+  const potentialCustomersCount = getPotentialCustomers(autoCount, campaignDays).toLocaleString("en-IN");
 
   const whatsappCalculatorUrl = `https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%20want%20to%20book%20${autoCount}%20autos%20for%20${campaignDays}%20days.%20Calculated%20budget%3A%20%E2%82%B9${totalBudget.toLocaleString("en-IN")}.`;
 
@@ -84,7 +78,7 @@ export default function HomePage() {
               {/* Left Column: Headline & Subtitle */}
               <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
                 
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-[#0052FF]/20 text-xs font-semibold font-mono text-[#0052FF] animate-pulse">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-[#0052FF]/20 text-xs font-semibold font-mono text-[#0052FF]">
                   <span className="status-dot-brand" />
                   <span>⚡ ADVERTISE BETTER. GROW SMARTER.</span>
                 </div>
@@ -95,22 +89,22 @@ export default function HomePage() {
                 </h1>
 
                 <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed font-sans">
-                  Smart cloud-connected 10&quot; HD LED screens mounted inside commercial auto-rickshaws. Delivering 12–15 minutes of captive, eye-level audience attention across Lucknow.
+                  High-impact illuminated backlit panels mounted on commercial auto-rickshaws. Delivering 15–20 minutes of eye-level audience attention across Lucknow&apos;s busiest commercial routes.
                 </p>
 
                 {/* Hero Feature Pills */}
                 <div className="grid grid-cols-2 gap-3 pt-2 max-w-lg text-left font-sans text-xs font-semibold text-slate-700">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <span className="text-[#0052FF] font-bold">👁️</span> 10–15 Min Dwell
+                    <span className="text-[#0052FF] font-bold">👁️</span> High Dwell Attention
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <span className="text-[#0052FF] font-bold">📡</span> GPS Telemetry
+                    <span className="text-[#0052FF] font-bold">💡</span> Premium Backlit Panels
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <span className="text-[#25D366] font-bold">⚡</span> Cloud Sync
+                    <span className="text-[#25D366] font-bold">📍</span> Lucknow Corridor Coverage
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2">
-                    <span className="text-[#0052FF] font-bold">💰</span> Starts ₹49/day
+                    <span className="text-[#0052FF] font-bold">💰</span> Starts ₹52/day per auto
                   </div>
                 </div>
 
@@ -137,7 +131,7 @@ export default function HomePage() {
 
               </div>
 
-              {/* Right Column: Unified Clean ROI & Budget Estimator Card */}
+              {/* Right Column: Unified Clean ROI & Budget Estimator Card (5 to 300 Autos) */}
               <div className="lg:col-span-6">
                 <div className="brand-card p-6 md:p-8 space-y-6 bg-white border border-slate-200 shadow-xl rounded-2xl">
                   
@@ -152,7 +146,7 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Slider 1: Auto Count */}
+                  {/* Slider 1: Auto Count (5 to 300) */}
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs font-semibold">
                       <span className="text-slate-700">Target Autos Fleet:</span>
@@ -161,7 +155,7 @@ export default function HomePage() {
                     <input 
                       type="range" 
                       min="5" 
-                      max="50" 
+                      max="300" 
                       step="5" 
                       value={autoCount} 
                       onChange={(e) => setAutoCount(Number(e.target.value))}
@@ -169,8 +163,8 @@ export default function HomePage() {
                     />
                     <div className="flex justify-between text-[10px] text-slate-400 font-mono">
                       <span>5 Autos</span>
-                      <span>25 Autos</span>
-                      <span>50 Autos</span>
+                      <span>100 Autos</span>
+                      <span>300 Autos</span>
                     </div>
                   </div>
 
@@ -196,11 +190,11 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Live Metric Cards */}
+                  {/* Live Metric Cards: Potential Customers & Rate */}
                   <div className="grid grid-cols-2 gap-4 pt-2">
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                      <span className="text-[11px] text-slate-500 font-mono uppercase block">Estimated Impressions</span>
-                      <span className="text-2xl font-black font-display text-[#0052FF]">{totalImpressions}</span>
+                      <span className="text-[11px] text-slate-500 font-mono uppercase block">Potential Customers</span>
+                      <span className="text-2xl font-black font-display text-[#0052FF]">{potentialCustomersCount}</span>
                     </div>
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                       <span className="text-[11px] text-slate-500 font-mono uppercase block">Rate / Auto / Day</span>
@@ -258,11 +252,11 @@ export default function HomePage() {
             <div className="text-center space-y-3 max-w-2xl mx-auto">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-[#0052FF]/30 text-xs font-mono text-[#0052FF]">
                 <span className="w-2 h-2 rounded-full bg-[#0052FF] animate-ping" />
-                <span>LIVE TELEMETRY &amp; CORRIDORS</span>
+                <span>COMMERCIAL CORRIDORS &amp; REACH</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Lucknow Transit Fleet Radar</h2>
               <p className="text-sm text-slate-600 font-sans">
-                Our smart auto displays traverse high-density business districts and commuter routes daily. Select a corridor below to inspect live fleet metrics.
+                Our backlit auto panels traverse high-density business districts and commuter routes daily. Select a corridor below to inspect coverage.
               </p>
             </div>
 
@@ -300,23 +294,23 @@ export default function HomePage() {
                     <span className="text-xl font-bold font-display text-[#0052FF]">{activeCorridor.autos} Rickshaws</span>
                   </div>
                   <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                    <span className="text-[10px] text-slate-500 font-mono uppercase block">Daily Impressions</span>
-                    <span className="text-xl font-bold font-display text-[#0052FF]">{activeCorridor.impressions}</span>
+                    <span className="text-[10px] text-slate-500 font-mono uppercase block">Potential Customers</span>
+                    <span className="text-xl font-bold font-display text-[#0052FF]">{activeCorridor.potentialCustomers}</span>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs font-sans">
                   <div className="flex justify-between text-slate-700">
-                    <span>Passenger Dwell Time:</span>
-                    <span className="font-mono text-[#0052FF] font-bold">12–15 Minutes</span>
+                    <span>Audience Dwell Time:</span>
+                    <span className="font-mono text-[#0052FF] font-bold">15–20 Minutes</span>
                   </div>
                   <div className="flex justify-between text-slate-700">
-                    <span>Screen Resolution:</span>
-                    <span className="font-mono text-slate-900 font-bold">1080p HD IPS</span>
+                    <span>Panel Specification:</span>
+                    <span className="font-mono text-slate-900 font-bold">High-Impact Backlit Hood Panel</span>
                   </div>
                   <div className="flex justify-between text-slate-700">
-                    <span>Proof-of-Play Logging:</span>
-                    <span className="font-mono text-[#0052FF] font-bold">Live Cloud Sync</span>
+                    <span>Quality Audit:</span>
+                    <span className="font-mono text-[#0052FF] font-bold">On-Ground Placement Proof</span>
                   </div>
                 </div>
 
@@ -330,7 +324,7 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/* ═══ MOBILE MAP VIEW (block lg:hidden): Dedicated Clean White/Slate Mobile Radar Card ═══ */}
+              {/* ═══ MOBILE MAP VIEW: Clean White/Slate Mobile Radar Card ═══ */}
               <div className="block lg:hidden lg:col-span-7 brand-card p-6 space-y-6 bg-white text-[#0B132B] border border-slate-200 shadow-xl">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider flex items-center gap-2">
@@ -344,7 +338,7 @@ export default function HomePage() {
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                   <div className="flex justify-between items-center text-xs font-bold font-mono">
                     <span className="text-[#0052FF]">{activeCorridor.name}</span>
-                    <span className="text-slate-500">Impression Velocity ⚡</span>
+                    <span className="text-slate-500">Reach Velocity ⚡</span>
                   </div>
                   
                   {/* Progress Line with Moving Auto */}
@@ -354,7 +348,7 @@ export default function HomePage() {
 
                   <div className="flex justify-between items-center text-xs font-mono text-slate-700">
                     <span>🛺 Active Fleet: <strong className="text-[#0B132B]">{activeCorridor.autos} Autos</strong></span>
-                    <span className="text-[#0052FF]"><strong>{activeCorridor.impressions}</strong> views/day</span>
+                    <span className="text-[#0052FF]"><strong>{activeCorridor.potentialCustomers}</strong></span>
                   </div>
                 </div>
 
@@ -384,7 +378,7 @@ export default function HomePage() {
 
               </div>
 
-              {/* ═══ DESKTOP MAP VIEW (hidden lg:flex): High-Resolution Clean SVG Canvas ═══ */}
+              {/* ═══ DESKTOP MAP VIEW: Clean High-Legibility SVG Canvas ═══ */}
               <div className="hidden lg:flex lg:col-span-7 brand-card p-6 h-[420px] items-center justify-center relative overflow-hidden bg-[#F8FAFC] border border-slate-200 shadow-xl">
                 
                 <svg viewBox="0 0 1000 500" className="w-full h-full relative z-10">
@@ -409,7 +403,7 @@ export default function HomePage() {
                   <use href="#heroRoute2" stroke="#E2E8F0" strokeWidth="22" strokeLinecap="round" fill="none"></use>
                   <use href="#heroRoute2" stroke="url(#brandRouteGradient)" strokeWidth="8" strokeDasharray="12 10" fill="none" className="animate-pulse"></use>
 
-                  {/* Prominent Large Moving Auto-Rickshaws */}
+                  {/* Prominent Large Forward-Moving Auto-Rickshaws */}
                   <g className="vehicle-auto" transform="translate(-20, -20)">
                     <text fontSize="42" filter="drop-shadow(0px 4px 10px rgba(0, 82, 255, 0.4))">🛺
                       <animateMotion dur="14s" repeatCount="indefinite">
@@ -492,25 +486,25 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ 4. ADZOOP SMART ECOSYSTEM (INTERACTIVE TABS) ═══ */}
+        {/* ═══ 4. ADZOOP PLATFORM SERVICES (AUTHENTIC STEPS) ═══ */}
         <section className="px-6 py-20 bg-slate-50 border-y border-slate-200 relative" id="how-it-works">
           <div className="max-w-7xl mx-auto space-y-12">
             
             <div className="text-center space-y-3 max-w-2xl mx-auto">
-              <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">PLATFORM ARCHITECTURE</span>
-              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">How Adzoop DOOH Works</h2>
+              <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">PLATFORM PROCESS</span>
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">How Adzoop Branding Works</h2>
               <p className="text-sm text-slate-600 font-sans">
-                A seamless blend of automotive hardware, cloud media distribution, and verified proof-of-play metrics.
+                A simple 4-step physical campaign execution process across Lucknow commercial routes.
               </p>
             </div>
 
             {/* Ecosystem Tabs */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[
-                { title: "01. Smart Hardware", desc: "10\" IPS HD Screens mounted inside auto cabins with automatic ignition sync." },
-                { title: "02. Cloud Scheduling", desc: "Deploy video & image creatives remotely across selected Lucknow corridors." },
-                { title: "03. GPS Geofencing", desc: "Filter campaign triggers based on commercial route coordinates." },
-                { title: "04. Proof-of-Play", desc: "Receive transparent daily playback count & compliance logs." },
+                { title: "01. Backlit Hood Panels", desc: "High-quality illuminated panels mounted securely on auto-rickshaw hoods." },
+                { title: "02. Commercial Routes", desc: "Selected high-footfall commercial zones like Hazratganj, Gomti Nagar & Aminabad." },
+                { title: "03. Route Compliance", desc: "Continuous daily transit along active passenger commuter corridors." },
+                { title: "04. On-Ground Audit", desc: "Physical inspection and placement proof provided for every campaign." },
               ].map((tab, idx) => (
                 <div
                   key={idx}
@@ -535,20 +529,20 @@ export default function HomePage() {
               <div className="lg:col-span-6 space-y-4">
                 <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">CAPABILITY HIGHLIGHT</span>
                 <h3 className="text-2xl font-bold font-display text-[#0B132B]">
-                  {activeEcosystemTab === 0 && "Automotive-Grade HD Screen Hardware"}
-                  {activeEcosystemTab === 1 && "Remote Cloud Creative Dispatch"}
-                  {activeEcosystemTab === 2 && "Hyper-Local Route Corridor Targeting"}
-                  {activeEcosystemTab === 3 && "Verifiable Proof-of-Play (PoP) Dashboard"}
+                  {activeEcosystemTab === 0 && "High-Impact Backlit Auto Hood Panels"}
+                  {activeEcosystemTab === 1 && "Lucknow Commercial Corridor Targeting"}
+                  {activeEcosystemTab === 2 && "Maximum Commuter & Passenger Dwell Attention"}
+                  {activeEcosystemTab === 3 && "Verifiable On-Ground Mounting Audit Reports"}
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed font-sans">
-                  {activeEcosystemTab === 0 && "Built for tough transit conditions. High brightness IPS panels remain vivid even in full sunlight, turning on automatically when the auto engine starts."}
-                  {activeEcosystemTab === 1 && "No manual USB changes needed. Upload your video or graphics to our cloud dashboard and deploy updates across 50+ autos in minutes."}
-                  {activeEcosystemTab === 2 && "Target precise buyer demographics by choosing high-density commercial markets, university clusters, or intercity commuter corridors."}
-                  {activeEcosystemTab === 3 && "Complete accountability. Every ad play is registered with time-stamped logs and verified fleet run hours."}
+                  {activeEcosystemTab === 0 && "Built with weather-resistant materials and bright backlighting to keep your brand glowing vividly day and night."}
+                  {activeEcosystemTab === 1 && "Position your brand in high-density shopping hubs, coaching corridors, and railway station intersections across Lucknow."}
+                  {activeEcosystemTab === 2 && "Auto-rickshaws move closely alongside cars, buses, and pedestrians, ensuring 15–20 minutes of repeated eye-level exposure."}
+                  {activeEcosystemTab === 3 && "Complete campaign transparency. Our team verifies every single auto installation and provides comprehensive photo proof."}
                 </p>
                 <div className="pt-2">
                   <a href={whatsappCalculatorUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-xs font-bold font-mono text-[#0052FF] hover:underline">
-                    Explore Technical Specs →
+                    Inquire About Campaign Placement →
                   </a>
                 </div>
               </div>
@@ -562,7 +556,7 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-sans font-bold text-white">
-                    <span>Click to launch video demo</span>
+                    <span>Click to view campaign showcase</span>
                     <span className="w-8 h-8 rounded-full bg-[#0052FF] text-white flex items-center justify-center shadow-lg">▶</span>
                   </div>
                 </div>
@@ -572,15 +566,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ 5. COMPARISON MATRIX ═══ */}
+        {/* ═══ 5. CORRECTED MEDIA COMPARISON MATRIX ═══ */}
         <section className="px-6 py-20 bg-white relative">
           <div className="max-w-7xl mx-auto space-y-12">
             
             <div className="text-center space-y-3 max-w-2xl mx-auto">
               <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">MEDIA COMPARISON</span>
-              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Why Adzoop Beats Traditional Media</h2>
+              <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Why Adzoop Beats Static Billboards</h2>
               <p className="text-sm text-slate-600 font-sans">
-                Stop wasting money on static billboards that pass by in 3 seconds or online ads that get skipped.
+                Static billboards are expensive and missed by fast-moving traffic. Adzoop moves with potential customers through high-density markets.
               </p>
             </div>
 
@@ -589,40 +583,40 @@ export default function HomePage() {
               <table className="w-full text-left border-collapse font-sans text-xs min-w-[700px]">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-slate-500 font-mono text-[11px] uppercase">
-                    <th className="p-4">Advertising Channel</th>
-                    <th className="p-4">Attention Dwell</th>
-                    <th className="p-4">Skippability</th>
-                    <th className="p-4">Weekly Cost per 10k Reach</th>
-                    <th className="p-4 text-[#0052FF]">Proof of Play</th>
+                    <th className="p-4">Advertising Media</th>
+                    <th className="p-4">Audience Attention Dwell</th>
+                    <th className="p-4">Targeted Mobility</th>
+                    <th className="p-4">Cost per 1,000 Potential Customers</th>
+                    <th className="p-4 text-[#0052FF]">Placement Verification</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   <tr className="bg-white">
                     <td className="p-4 font-bold text-slate-700 flex items-center gap-2">
-                      <span className="text-red-500">✕</span> Traditional Billboards
+                      <span className="text-red-500">✕</span> Static Billboards
                     </td>
-                    <td className="p-4 text-slate-600">2–3 Seconds</td>
-                    <td className="p-4 text-slate-600">Easily Ignored</td>
-                    <td className="p-4 text-slate-600">₹25,000 – ₹50,000</td>
-                    <td className="p-4 text-slate-400 font-mono">None (Estimated)</td>
+                    <td className="p-4 text-slate-600">2–3 Seconds (Glance)</td>
+                    <td className="p-4 text-slate-600">Fixed Single Location</td>
+                    <td className="p-4 text-slate-600">High (Expensive Overhead)</td>
+                    <td className="p-4 text-slate-400 font-mono">Static Photo Only</td>
                   </tr>
                   <tr className="bg-white">
                     <td className="p-4 font-bold text-slate-700 flex items-center gap-2">
-                      <span className="text-red-500">✕</span> Social / Video Ads
+                      <span className="text-red-500">✕</span> Social Digital Ads
                     </td>
-                    <td className="p-4 text-slate-600">3–5 Seconds</td>
-                    <td className="p-4 text-slate-600">Skipped via Button / AdBlock</td>
-                    <td className="p-4 text-slate-600">₹15,000 – ₹30,000</td>
+                    <td className="p-4 text-slate-600">3–5 Seconds (Skipped)</td>
+                    <td className="p-4 text-slate-600">Screen Feeds</td>
+                    <td className="p-4 text-slate-600">Moderate to High</td>
                     <td className="p-4 text-slate-500 font-mono">Digital Clicks Only</td>
                   </tr>
                   <tr className="bg-blue-50/60 border-2 border-[#0052FF]/40">
                     <td className="p-4 font-bold text-[#0052FF] text-sm flex items-center gap-2">
-                      <span className="text-[#0052FF]">✓</span> Adzoop DOOH Transit
+                      <span className="text-[#0052FF]">✓</span> Adzoop Backlit Transit
                     </td>
-                    <td className="p-4 font-bold text-slate-900 text-sm">12–15 Minutes</td>
-                    <td className="p-4 font-bold text-[#0052FF]">Unskippable Eye-Level</td>
-                    <td className="p-4 font-bold text-[#0052FF]">₹2,000 – ₹5,000</td>
-                    <td className="p-4 font-bold text-[#0052FF] font-mono">100% Cloud GPS Logs</td>
+                    <td className="p-4 font-bold text-slate-900 text-sm">15–20 Minutes (Captive)</td>
+                    <td className="p-4 font-bold text-[#0052FF]">Mobile Across Lucknow Corridors</td>
+                    <td className="p-4 font-bold text-[#0052FF]">Highly Cost-Effective (Starts ₹52/day)</td>
+                    <td className="p-4 font-bold text-[#0052FF] font-mono">100% On-Ground Mounting Audit</td>
                   </tr>
                 </tbody>
               </table>
@@ -631,13 +625,13 @@ export default function HomePage() {
             {/* Mobile Stacked Card View (block on mobile, hidden on md+) */}
             <div className="block md:hidden space-y-4 font-sans text-xs">
               
-              {/* Traditional Billboards Card */}
+              {/* Static Billboards Card */}
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                   <span className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                    <span className="text-red-500 font-bold">✕</span> Traditional Billboards
+                    <span className="text-red-500 font-bold">✕</span> Static Billboards
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-mono text-[10px]">Static</span>
+                  <span className="px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-mono text-[10px]">Fixed</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-slate-600">
                   <div>
@@ -645,16 +639,16 @@ export default function HomePage() {
                     <span className="font-semibold text-slate-800">2–3 Seconds</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">Skippability</span>
-                    <span className="font-semibold text-slate-800">Easily Ignored</span>
+                    <span className="text-[10px] text-slate-400 block uppercase">Mobility</span>
+                    <span className="font-semibold text-slate-800">Fixed Location</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">Cost / 10k Reach</span>
-                    <span className="font-semibold text-slate-800">₹25,000 – ₹50,000</span>
+                    <span className="text-[10px] text-slate-400 block uppercase">Cost Efficiency</span>
+                    <span className="font-semibold text-slate-800">Expensive Overhead</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">Proof of Play</span>
-                    <span className="font-mono text-slate-500">None (Estimated)</span>
+                    <span className="text-[10px] text-slate-400 block uppercase">Verification</span>
+                    <span className="font-mono text-slate-500">Static Photo Only</span>
                   </div>
                 </div>
               </div>
@@ -673,46 +667,46 @@ export default function HomePage() {
                     <span className="font-semibold text-slate-800">3–5 Seconds</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">Skippability</span>
-                    <span className="font-semibold text-slate-800">Skipped via Button</span>
+                    <span className="text-[10px] text-slate-400 block uppercase">Mobility</span>
+                    <span className="font-semibold text-slate-800">Screen Feeds</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">Cost / 10k Reach</span>
-                    <span className="font-semibold text-slate-800">₹15,000 – ₹30,000</span>
+                    <span className="text-[10px] text-slate-400 block uppercase">Cost Efficiency</span>
+                    <span className="font-semibold text-slate-800">Moderate</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">Proof of Play</span>
+                    <span className="text-[10px] text-slate-400 block uppercase">Verification</span>
                     <span className="font-mono text-slate-500">Digital Clicks Only</span>
                   </div>
                 </div>
               </div>
 
-              {/* Adzoop DOOH Transit Featured Card */}
+              {/* Adzoop Backlit Transit Featured Card */}
               <div className="p-5 rounded-2xl bg-blue-50/80 border-2 border-[#0052FF] space-y-3 shadow-lg relative">
                 <div className="absolute -top-3 right-4 px-3 py-0.5 rounded-full bg-[#0052FF] text-white font-bold text-[9px] font-mono tracking-wider uppercase shadow-xs">
                   WINNER
                 </div>
                 <div className="flex items-center justify-between border-b border-blue-200 pb-2">
                   <span className="font-bold text-[#0052FF] text-sm flex items-center gap-1.5">
-                    <span className="text-[#0052FF] font-bold">✓</span> Adzoop DOOH Transit
+                    <span className="text-[#0052FF] font-bold">✓</span> Adzoop Backlit Transit
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-slate-700">
                   <div>
                     <span className="text-[10px] text-slate-500 block uppercase">Attention Dwell</span>
-                    <span className="font-black text-[#0052FF] text-sm">12–15 Minutes</span>
+                    <span className="font-black text-[#0052FF] text-sm">15–20 Minutes</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block uppercase">Skippability</span>
-                    <span className="font-bold text-[#0052FF]">Unskippable</span>
+                    <span className="text-[10px] text-slate-500 block uppercase">Mobility</span>
+                    <span className="font-bold text-[#0052FF]">Commercial Corridors</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block uppercase">Cost / 10k Reach</span>
-                    <span className="font-black text-[#0052FF] text-sm">₹2,000 – ₹5,000</span>
+                    <span className="text-[10px] text-slate-500 block uppercase">Cost Efficiency</span>
+                    <span className="font-black text-[#0052FF] text-sm">Starts ₹52/day</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block uppercase">Proof of Play</span>
-                    <span className="font-mono font-bold text-[#0052FF]">100% Cloud GPS</span>
+                    <span className="text-[10px] text-slate-500 block uppercase">Verification</span>
+                    <span className="font-mono font-bold text-[#0052FF]">100% On-Ground Audit</span>
                   </div>
                 </div>
               </div>
@@ -722,7 +716,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ 6. PRICING PACKAGES ═══ */}
+        {/* ═══ 6. PRICING PACKAGES (UPDATED RATES) ═══ */}
         <section className="px-6 py-20 bg-slate-50 border-t border-slate-200 relative" id="pricing">
           <div className="max-w-7xl mx-auto space-y-12">
             
@@ -730,7 +724,7 @@ export default function HomePage() {
               <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider">TRANSPARENT PRICING</span>
               <h2 className="text-3xl sm:text-4xl font-black font-display text-[#0B132B]">Campaign Plans Built for Growth</h2>
               <p className="text-sm text-slate-600 font-sans">
-                Choose a package that matches your advertising footprint across Lucknow.
+                Choose an auto rickshaw backlit panel package that matches your brand footprint in Lucknow.
               </p>
             </div>
 
@@ -739,20 +733,20 @@ export default function HomePage() {
               {/* Tier 1 */}
               <div className="brand-card p-6 space-y-6 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <span className="text-xs font-mono text-slate-400 font-bold uppercase">ENTRY LEVEL</span>
-                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Hyperlocal Lite</h3>
+                  <span className="text-xs font-mono text-slate-400 font-bold uppercase">5 TO 19 AUTOS</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Starter Fleet</h3>
                   <p className="text-xs text-slate-600">Best for local retail outlets &amp; single store launches.</p>
                   <div className="pt-2">
-                    <span className="text-3xl font-black font-display text-[#0B132B]">₹79</span>
+                    <span className="text-3xl font-black font-display text-[#0B132B]">₹110</span>
                     <span className="text-xs text-slate-500"> / auto / day</span>
                   </div>
                   <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Up to 5 Autos</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 1 Selected Corridor</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Weekly Play Logs</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 5 to 19 Backlit Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Target 1 Lucknow Corridor</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> On-Ground Placement Audit</li>
                   </ul>
                 </div>
-                <Link href="/contact?package=hyperlocal-lite" className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs text-center block transition-all">
+                <Link href="/contact?package=starter-fleet" className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs text-center block transition-all">
                   Book Plan →
                 </Link>
               </div>
@@ -760,20 +754,20 @@ export default function HomePage() {
               {/* Tier 2 */}
               <div className="brand-card p-6 space-y-6 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">GROWTH</span>
-                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Market Penetrator</h3>
+                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">20 TO 49 AUTOS</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Market Expansion</h3>
                   <p className="text-xs text-slate-600">Ideal for expanding chains &amp; multi-branch services.</p>
                   <div className="pt-2">
-                    <span className="text-3xl font-black font-display text-[#0052FF]">₹69</span>
+                    <span className="text-3xl font-black font-display text-[#0052FF]">₹92–100</span>
                     <span className="text-xs text-slate-500"> / auto / day</span>
                   </div>
                   <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 10–20 Autos</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Up to 3 Corridors</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Dedicated Account Desk</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 20 to 49 Backlit Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Up to 3 Lucknow Corridors</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Dedicated Account Manager</li>
                   </ul>
                 </div>
-                <Link href="/contact?package=market-penetrator" className="w-full py-3.5 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs text-center block transition-all shadow-md">
+                <Link href="/contact?package=market-expansion" className="w-full py-3.5 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs text-center block transition-all shadow-md">
                   Book Plan →
                 </Link>
               </div>
@@ -784,18 +778,17 @@ export default function HomePage() {
                   MOST POPULAR
                 </div>
                 <div className="space-y-3">
-                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">RECOMMENDED</span>
+                  <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">50 TO 149 AUTOS</span>
                   <h3 className="text-xl font-bold font-display text-[#0B132B]">City Domination</h3>
                   <p className="text-xs text-slate-600">Maximum brand authority &amp; footfall across Lucknow.</p>
                   <div className="pt-2">
-                    <span className="text-3xl font-black font-display text-[#0052FF]">₹59</span>
+                    <span className="text-3xl font-black font-display text-[#0052FF]">₹55–88</span>
                     <span className="text-xs text-slate-500"> / auto / day</span>
                   </div>
                   <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 25–40 Autos</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> All Lucknow Corridors</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Real-Time GPS Telemetry</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Creative Design Support</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 50 to 149 Backlit Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> All Lucknow Commercial Routes</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Photo &amp; Video Audit Proof</li>
                   </ul>
                 </div>
                 <Link href="/contact?package=city-domination" className="w-full py-3.5 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs text-center block transition-all shadow-lg">
@@ -806,20 +799,20 @@ export default function HomePage() {
               {/* Tier 4 */}
               <div className="brand-card p-6 space-y-6 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <span className="text-xs font-mono text-slate-400 font-bold uppercase">ENTERPRISE</span>
-                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Enterprise Network</h3>
-                  <p className="text-xs text-slate-600">Large-scale regional campaigns &amp; custom fleets.</p>
+                  <span className="text-xs font-mono text-slate-400 font-bold uppercase">150 TO 300 AUTOS</span>
+                  <h3 className="text-xl font-bold font-display text-[#0B132B]">Mega Fleet</h3>
+                  <p className="text-xs text-slate-600">Large-scale regional campaigns &amp; custom fleet outreaches.</p>
                   <div className="pt-2">
-                    <span className="text-3xl font-black font-display text-[#0B132B]">₹49</span>
+                    <span className="text-3xl font-black font-display text-[#0B132B]">₹52–56</span>
                     <span className="text-xs text-slate-500"> / auto / day</span>
                   </div>
                   <ul className="space-y-2 text-xs text-slate-700 pt-2 border-t border-slate-100">
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 50+ Custom Autos</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Priority Loop Scheduling</li>
-                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Custom API Telemetry</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> 150 to 300 Backlit Autos</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Full Lucknow City Coverage</li>
+                    <li className="flex items-center gap-2"><span className="text-[#0052FF]">✓</span> Priority Mounting Execution</li>
                   </ul>
                 </div>
-                <Link href="/contact?package=enterprise-network" className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs text-center block transition-all">
+                <Link href="/contact?package=mega-fleet" className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs text-center block transition-all">
                   Contact Enterprise →
                 </Link>
               </div>
@@ -829,7 +822,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══ 7. DRIVER PARTNER PORTAL (PILOTS) ═══ */}
+        {/* ═══ 7. DRIVER PARTNER PORTAL ═══ */}
         <section className="px-6 py-20 bg-white relative" id="pilot">
           <div className="max-w-7xl mx-auto brand-card p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-blue-50/30 border border-slate-200">
             
@@ -844,17 +837,17 @@ export default function HomePage() {
               </h2>
 
               <p className="text-sm text-slate-600 leading-relaxed font-sans">
-                Join Lucknow&apos;s largest smart transit driver network. Turn your auto-rickshaw rides into guaranteed monthly earnings. Zero extra effort required from your side.
+                Join Lucknow&apos;s largest auto-rickshaw transit network. Earn guaranteed monthly income simply by mounting an illuminated Adzoop backlit panel on your auto.
               </p>
 
               <div className="grid grid-cols-2 gap-4 text-xs font-sans font-semibold">
                 <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
-                  <span className="text-[#0052FF] font-bold block mb-1">💰 Extra Monthly Income</span>
-                  <span className="text-slate-500">Guaranteed passive payout directly to your bank.</span>
+                  <span className="text-[#0052FF] font-bold block mb-1">💰 Extra Monthly Payout</span>
+                  <span className="text-slate-500">Guaranteed passive income directly to your bank account.</span>
                 </div>
                 <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
-                  <span className="text-[#0052FF] font-bold block mb-1">🛡️ Insurance Benefits</span>
-                  <span className="text-slate-500">Access driver partner welfare benefits after 90 days.</span>
+                  <span className="text-[#0052FF] font-bold block mb-1">🛠️ Free Panel Installation</span>
+                  <span className="text-slate-500">Zero maintenance or upfront cost for drivers.</span>
                 </div>
               </div>
 
@@ -874,7 +867,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-white/95 backdrop-blur-md border border-slate-200 text-xs font-mono">
                   <span className="text-[#0052FF] font-bold block">Lucknow Driver Onboarding</span>
-                  <span className="text-slate-600">Free hardware installation at our hub.</span>
+                  <span className="text-slate-600">Free backlit panel installation at our hub.</span>
                 </div>
               </div>
             </div>

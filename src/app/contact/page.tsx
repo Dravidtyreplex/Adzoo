@@ -31,7 +31,7 @@ function ContactFormContent() {
         .split("-")
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
-      setFormData(prev => ({ ...prev, package: `${formattedSol} Solution` }));
+      setFormData(prev => ({ ...prev, package: `${formattedSol} Service` }));
     }
   }, [searchParams]);
 
@@ -45,7 +45,7 @@ function ContactFormContent() {
     setSubmitted(true);
   };
 
-  const whatsappUrl = "https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%27d%20like%20to%20discuss%20an%20auto%20advertising%20campaign.";
+  const whatsappUrl = "https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%27d%20like%20to%20discuss%20an%20auto%20backlit%20branding%20campaign.";
   const phoneNumber = "+91 9639390951";
 
   return (
@@ -69,11 +69,11 @@ function ContactFormContent() {
 
               <h1 className="text-4xl sm:text-5xl font-black font-display text-[#0B132B]">
                 Launch Your Campaign <br />
-                <span className="text-gradient-brand">With Adzoop DOOH</span>
+                <span className="text-[#0052FF]">With Adzoop Branding</span>
               </h1>
 
               <p className="text-base text-slate-600 leading-relaxed">
-                Connect with Lucknow&apos;s leading transit media network to design, target, and launch high-recall campaigns.
+                Connect with Lucknow&apos;s leading auto-rickshaw transit media team to design, target, and launch high-recall campaigns.
               </p>
 
               {/* Channels list */}
@@ -99,7 +99,7 @@ function ContactFormContent() {
                 </div>
 
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-100 text-[#9333EA] flex items-center justify-center text-lg font-bold">📍</div>
+                  <div className="w-10 h-10 rounded-lg bg-blue-100 text-[#0052FF] flex items-center justify-center text-lg font-bold">📍</div>
                   <div>
                     <span className="text-slate-500 block font-mono">Lucknow Operations Hub</span>
                     <span className="font-bold text-slate-900">Lucknow, Uttar Pradesh, India</span>
@@ -110,7 +110,7 @@ function ContactFormContent() {
 
             {/* Right Form Column */}
             <div className="lg:col-span-7">
-              <div className="brand-card p-6 md:p-8 space-y-6 bg-white border border-slate-200">
+              <div className="brand-card p-6 md:p-8 space-y-6 bg-white border border-slate-200 shadow-xl rounded-2xl">
                 
                 <div className="border-b border-slate-100 pb-4">
                   <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">DIRECT SUBMISSION</span>
@@ -125,7 +125,7 @@ function ContactFormContent() {
                     </div>
                     <h4 className="text-2xl font-bold font-display text-slate-900">Campaign Brief Logged!</h4>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans max-w-md mx-auto">
-                      Thank you <strong>{formData.name || "there"}</strong>. Your briefing for <strong>{formData.package || "Adzoop Campaign"}</strong> has been received by our Lucknow team.
+                      Thank you <strong>{formData.name || "there"}</strong>. Your briefing for <strong>{formData.package || "Adzoop Backlit Campaign"}</strong> has been received by our Lucknow team.
                     </p>
                     <button
                       onClick={() => {
@@ -194,20 +194,20 @@ function ContactFormContent() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-slate-700 font-semibold block">Select Package or Solution Target</label>
+                      <label className="text-slate-700 font-semibold block">Select Package or Route Target</label>
                       <select 
                         name="package" 
                         value={formData.package} 
                         onChange={handleChange}
                         className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-[#0052FF] transition-colors"
                       >
-                        <option value="">Choose a Package / Solution Plan...</option>
-                        <option value="Hyperlocal Lite">Hyperlocal Lite (₹79/day)</option>
-                        <option value="Market Penetrator">Market Penetrator (₹69/day)</option>
-                        <option value="City Domination">City Domination (₹59/day)</option>
-                        <option value="Enterprise Expansion">Enterprise Expansion (₹49/day)</option>
-                        <option value="Auto LED Solution">Auto LED Advertising</option>
-                        <option value="Digital Billboard Solution">Digital Billboard Network</option>
+                        <option value="">Choose a Package / Service Plan...</option>
+                        <option value="Starter Fleet">Starter Fleet (5 to 19 Autos - ₹110/day)</option>
+                        <option value="Market Expansion">Market Expansion (20 to 49 Autos - ₹92–100/day)</option>
+                        <option value="City Domination">City Domination (50 to 149 Autos - ₹55–88/day)</option>
+                        <option value="Mega Fleet">Mega Fleet (150 to 300 Autos - ₹52–56/day)</option>
+                        <option value="Backlit Auto Hood Solution">Backlit Auto Rickshaw Hood Branding</option>
+                        <option value="Commercial Corridor Targeting">Lucknow Commercial Corridors</option>
                       </select>
                     </div>
 
@@ -219,14 +219,14 @@ function ContactFormContent() {
                         rows={4} 
                         value={formData.message} 
                         onChange={handleChange} 
-                        placeholder="Tell us about your brand targets, preferred Lucknow routes, and creative timeline..." 
+                        placeholder="Tell us about your brand targets, preferred Lucknow routes, and campaign launch timeline..." 
                         className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0052FF] transition-colors"
                       />
                     </div>
 
                     <button 
                       type="submit" 
-                      className="w-full py-4 rounded-xl btn-brand-primary text-sm font-sans flex items-center justify-center gap-2 shadow-lg"
+                      className="w-full py-4 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-sm font-sans flex items-center justify-center gap-2 shadow-lg"
                     >
                       Submit Campaign Brief →
                     </button>

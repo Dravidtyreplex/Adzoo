@@ -6,7 +6,7 @@ import AdzoopLogo from "./AdzoopLogo";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const whatsappUrl = "https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%27d%20like%20to%20discuss%20an%20auto%20advertising%20campaign.";
+  const whatsappUrl = "https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%27d%20like%20to%20discuss%20an%20auto%20backlit%20branding%20campaign.";
 
   return (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-12 font-sans relative overflow-hidden">
@@ -26,23 +26,23 @@ export default function Footer() {
             </Link>
 
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
-              Lucknow&apos;s premier digital out-of-home (DOOH) transit media platform. Cloud-connected smart displays inside commercial auto-rickshaws, delivering unskippable eye-level brand recall.
+              Lucknow&apos;s leading auto-rickshaw transit media platform. High-impact illuminated backlit panels mounted on commercial auto-rickshaws, delivering unskippable eye-level brand recall to commuters across high-density markets.
             </p>
 
             <div className="flex items-center gap-2 pt-2 text-xs font-mono text-[#0052FF]">
               <span className="status-dot-brand" />
-              <span className="font-bold">⚡ 500+ ACTIVE DOOH SCREENS IN LUCKNOW</span>
+              <span className="font-bold">⚡ 500+ ACTIVE BACKLIT AUTO PANELS IN LUCKNOW</span>
             </div>
           </div>
 
-          {/* Col 2: Solutions */}
+          {/* Col 2: Services */}
           <div className="space-y-3">
-            <h4 className="font-bold text-xs text-white font-display uppercase tracking-wider">Solutions</h4>
+            <h4 className="font-bold text-xs text-white font-display uppercase tracking-wider">Services</h4>
             <ul className="space-y-2 text-xs font-semibold">
-              <li><Link href="/#how-it-works" className="hover:text-[#0052FF] transition-colors">Auto LED Display Screens</Link></li>
-              <li><Link href="/contact?solution=digital-billboard" className="hover:text-[#0052FF] transition-colors">Digital Billboard Grid</Link></li>
-              <li><Link href="/contact?solution=cab-interior" className="hover:text-[#0052FF] transition-colors">Cab Interior Ads</Link></li>
-              <li><Link href="/contact?solution=bus-back" className="hover:text-[#0052FF] transition-colors">Transit Bus Back Media</Link></li>
+              <li><Link href="/#how-it-works" className="hover:text-[#0052FF] transition-colors">Backlit Auto Hood Branding</Link></li>
+              <li><Link href="/contact?solution=commercial-corridors" className="hover:text-[#0052FF] transition-colors">Lucknow Commercial Corridors</Link></li>
+              <li><Link href="/contact?solution=transit-media" className="hover:text-[#0052FF] transition-colors">High-Impact Mobile Media</Link></li>
+              <li><Link href="/contact?solution=fleet-branding" className="hover:text-[#0052FF] transition-colors">Retail &amp; Store Outreaches</Link></li>
             </ul>
           </div>
 
@@ -61,7 +61,7 @@ export default function Footer() {
 
           {/* Col 4: Lucknow Corridors */}
           <div className="space-y-3">
-            <h4 className="font-bold text-xs text-white font-display uppercase tracking-wider">Active Corridors</h4>
+            <h4 className="font-bold text-xs text-white font-display uppercase tracking-wider">Active Lucknow Routes</h4>
             <div className="flex flex-wrap gap-1.5 text-[11px] font-mono">
               <span className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">Hazratganj</span>
               <span className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">Gomti Nagar</span>
@@ -81,7 +81,7 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link href="/contact" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/contact" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/contact" className="hover:text-white transition-colors">Route Telemetry</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">Route Coverage</Link>
           </div>
         </div>
 

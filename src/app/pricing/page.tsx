@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Link from "next/link";
+import { getDailyRate, getPotentialCustomers } from "../../utils/pricing";
 
 export default function PricingPage() {
-  const [isMonthly, setIsMonthly] = useState(false);
+  const [autoCount, setAutoCount] = useState<number>(20);
+  const [campaignDays, setCampaignDays] = useState<number>(14);
   const [selectedRoutes, setSelectedRoutes] = useState<string[]>(["Hazratganj Hub", "Gomti Nagar Corridor"]);
 
   const toggleRoute = (route: string) => {
@@ -19,66 +21,68 @@ export default function PricingPage() {
     }
   };
 
-  const discountMultiplier = isMonthly ? 0.8 : 1.0;
+  const currentRate = getDailyRate(autoCount);
+  const totalBudget = autoCount * campaignDays * currentRate;
+  const potentialCustomersCount = getPotentialCustomers(autoCount, campaignDays).toLocaleString("en-IN");
 
   const packages = [
     {
-      name: "Hyperlocal Lite",
-      tagline: "Best for local retail outlets & single store promotions.",
-      baseRate: 79,
-      autos: "5 Autos",
+      name: "Starter Fleet",
+      autos: "5 to 19 Autos",
+      rate: "₹110 / day / auto",
+      desc: "Ideal for single store promotions & local retail launches.",
       features: [
-        "1 Selected Lucknow Corridor",
-        "10\" IPS HD Smart Screen",
-        "Weekly Play Logs Report",
-        "Cloud Content Upload",
+        "1 Target Lucknow Commercial Route",
+        "High-Visibility Backlit Auto Hood Panel",
+        "On-Ground Mounting Inspection Proof",
+        "Weekly Operational Report",
       ],
-      link: "/contact?package=hyperlocal-lite",
+      link: "/contact?package=starter-fleet",
       featured: false,
     },
     {
-      name: "Market Penetrator",
-      tagline: "Ideal for growing outlets requiring steady city-wide visibility.",
-      baseRate: 69,
-      autos: "15 Autos",
+      name: "Market Expansion",
+      autos: "20 to 49 Autos",
+      rate: "₹92 – ₹100 / day / auto",
+      desc: "Best for growing retail chains & multi-location brands.",
       features: [
-        "Up to 3 Lucknow Corridors",
-        "10\" IPS HD Smart Screen",
-        "Dedicated Account Desk",
-        "GPS Route Compliance Data",
-        "Weekly Content Refresh",
+        "Up to 3 Lucknow Commercial Routes",
+        "High-Visibility Backlit Auto Hood Panel",
+        "Dedicated Campaign Manager",
+        "Photo & Video Placement Verification",
+        "Mid-Campaign Route Optimization",
       ],
-      link: "/contact?package=market-penetrator",
+      link: "/contact?package=market-expansion",
       featured: false,
     },
     {
       name: "City Domination",
-      tagline: "Recommended. Maximizes impressions and builds high local authority.",
-      baseRate: 59,
-      autos: "30 Autos",
+      autos: "50 to 149 Autos",
+      rate: "₹55 – ₹88 / day / auto",
+      desc: "Recommended. Maximizes mindshare and footfall across Lucknow.",
       features: [
-        "All Lucknow Commercial Corridors",
-        "High-Frequency Loop Priority",
-        "Real-Time GPS Telemetry Sync",
-        "Creative Graphic Design Support",
-        "Proof-of-Play Video Audits",
+        "All Lucknow Commercial Routes Included",
+        "High-Visibility Backlit Auto Hood Panel",
+        "Priority On-Ground Mounting Execution",
+        "Complete Placement Audit Verification",
+        "Custom Creative Print Guidance",
       ],
       link: "/contact?package=city-domination",
       featured: true,
     },
     {
-      name: "Enterprise Network",
-      tagline: "Best for large-scale corporate outreach across regions.",
-      baseRate: 49,
-      autos: "50+ Autos",
+      name: "Mega Fleet",
+      autos: "150 to 300 Autos",
+      rate: "₹52 – ₹56 / day / auto",
+      desc: "Large-scale corporate campaigns & regional market takeovers.",
       features: [
-        "Full City-Wide Fleet Access",
-        "Exclusive Loop Scheduling Rules",
-        "Custom API Telemetry Feeds",
-        "Dedicated Operations Lead",
-        "Omnichannel Retargeting Sync",
+        "Full Lucknow City Fleet Coverage",
+        "High-Visibility Backlit Auto Hood Panel",
+        "Dedicated Field Operations Lead",
+        "Omnichannel Marketing Alignment",
+        "Exclusive Route Distribution Rules",
       ],
-      link: "/contact?package=enterprise-network",
+      link: "/contact?package=mega-fleet",
       featured: false,
     },
   ];
@@ -95,36 +99,110 @@ export default function PricingPage() {
         {/* ═══ 1. PRICING HERO ═══ */}
         <section className="px-6 py-12 md:py-16 text-center max-w-4xl mx-auto space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-[#0052FF]/30 text-xs font-mono text-[#0052FF]">
-            <span>💎 TRANSPARENT DOOH PRICING</span>
+            <span>💎 TRANSPARENT AUTO BACKLIT BRANDING PRICING</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-black font-display text-[#0B132B]">
             Transparent, Cost-Effective <br />
-            <span className="text-gradient-brand">Campaign Packages</span>
+            <span className="text-[#0052FF]">Campaign Packages</span>
           </h1>
 
           <p className="text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
-            Choose an auto rickshaw LED display plan that directly matches your advertising footprint in Lucknow. Build high brand awareness for a fraction of static billboard rates.
+            Choose an auto rickshaw backlit panel package that directly matches your advertising footprint in Lucknow. Build high brand awareness for a fraction of static billboard rates.
           </p>
+        </section>
 
-          {/* Billing Cycle Toggle Switch */}
-          <div className="pt-4 flex items-center justify-center gap-4">
-            <span className={`text-xs font-semibold ${!isMonthly ? "text-[#0052FF]" : "text-slate-500"}`}>Weekly Billing</span>
-            <button
-              onClick={() => setIsMonthly(!isMonthly)}
-              className="w-14 h-8 rounded-full bg-slate-200 p-1 border border-slate-300 relative transition-all"
-            >
-              <div className={`w-6 h-6 rounded-full bg-gradient-to-r from-[#0052FF] to-[#9333EA] transition-transform ${isMonthly ? "translate-x-6" : "translate-x-0"}`} />
-            </button>
-            <div className="flex items-center gap-1.5">
-              <span className={`text-xs font-semibold ${isMonthly ? "text-[#9333EA]" : "text-slate-500"}`}>Monthly Commitment</span>
-              <span className="px-2 py-0.5 rounded-full bg-purple-50 border border-[#9333EA]/30 text-[#9333EA] font-mono text-[10px] font-bold">SAVE 20%</span>
+        {/* ═══ 2. INTERACTIVE PRICING CALCULATOR (5 TO 300 AUTOS) ═══ */}
+        <section className="px-6 py-6 max-w-4xl mx-auto">
+          <div className="brand-card p-6 md:p-8 space-y-6 bg-white border border-slate-200 shadow-xl rounded-2xl">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-xs font-mono text-[#0052FF] font-bold uppercase tracking-wider block">CUSTOM CAMPAIGN ESTIMATOR</span>
+                <h3 className="text-xl font-bold font-display text-[#0B132B]">Interactive Budget &amp; Reach Calculator</h3>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-[#0052FF]/20 flex items-center justify-center text-[#0052FF] text-base font-black">
+                ₹
+              </div>
             </div>
+
+            {/* Slider 1: Auto Count (5 to 300) */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-semibold">
+                <span className="text-slate-700">Target Autos Fleet:</span>
+                <span className="text-[#0052FF] font-mono font-bold text-sm">{autoCount} Auto Rickshaws</span>
+              </div>
+              <input 
+                type="range" 
+                min="5" 
+                max="300" 
+                step="5" 
+                value={autoCount} 
+                onChange={(e) => setAutoCount(Number(e.target.value))}
+                className="custom-brand-slider"
+              />
+              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                <span>5 Autos</span>
+                <span>100 Autos</span>
+                <span>300 Autos</span>
+              </div>
+            </div>
+
+            {/* Slider 2: Duration */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-semibold">
+                <span className="text-slate-700">Campaign Duration:</span>
+                <span className="text-[#0052FF] font-mono font-bold text-sm">{campaignDays} Days</span>
+              </div>
+              <input 
+                type="range" 
+                min="7" 
+                max="30" 
+                step="1" 
+                value={campaignDays} 
+                onChange={(e) => setCampaignDays(Number(e.target.value))}
+                className="custom-brand-slider"
+              />
+              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                <span>7 Days</span>
+                <span>14 Days</span>
+                <span>30 Days</span>
+              </div>
+            </div>
+
+            {/* Live Metrics */}
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <span className="text-[11px] text-slate-500 font-mono uppercase block">Potential Customers</span>
+                <span className="text-2xl font-black font-display text-[#0052FF]">{potentialCustomersCount}</span>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <span className="text-[11px] text-slate-500 font-mono uppercase block">Rate / Auto / Day</span>
+                <span className="text-2xl font-black font-display text-[#0052FF]">₹{currentRate}</span>
+              </div>
+            </div>
+
+            {/* Budget Bar */}
+            <div className="p-4 rounded-xl bg-[#0B132B] text-white flex items-center justify-between shadow-lg">
+              <div>
+                <span className="text-xs text-slate-400 font-mono uppercase block">Total Campaign Budget</span>
+                <span className="text-2xl font-black font-display text-white">₹{totalBudget.toLocaleString("en-IN")}</span>
+              </div>
+              <a 
+                href={`https://wa.me/919639390951?text=Hi%20Adzoop%2C%20I%20want%20to%20book%20${autoCount}%20autos%20for%20${campaignDays}%20days.%20Budget%3A%20%E2%82%B9${totalBudget.toLocaleString("en-IN")}.`}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-5 py-3 rounded-xl bg-[#0052FF] hover:bg-[#0042D0] text-white font-bold text-xs font-sans transition-all shadow-md"
+              >
+                Book This Plan →
+              </a>
+            </div>
+
           </div>
         </section>
 
-        {/* ═══ 2. INTERACTIVE ROUTE SELECTION CHECKLIST ═══ */}
-        <section className="px-6 py-6 max-w-5xl mx-auto">
+        {/* ═══ 3. INTERACTIVE ROUTE SELECTION CHECKLIST ═══ */}
+        <section className="px-6 py-6 max-w-4xl mx-auto">
           <div className="brand-card p-6 space-y-4 bg-white border border-slate-200">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono text-[#0052FF] font-bold uppercase">CUSTOM ROUTE TARGETING</span>
@@ -155,11 +233,10 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* ═══ 3. PACKAGE CARDS ═══ */}
+        {/* ═══ 4. PACKAGE CARDS (UPDATED TIER RATES) ═══ */}
         <section className="px-6 py-12 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 font-sans">
             {packages.map((pkg, idx) => {
-              const effectiveRate = Math.round(pkg.baseRate * discountMultiplier);
               return (
                 <div 
                   key={idx}
@@ -168,7 +245,7 @@ export default function PricingPage() {
                   }`}
                 >
                   {pkg.featured && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-[#0052FF] to-[#9333EA] text-white font-black text-[10px] font-mono tracking-wider uppercase shadow-md">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[#0052FF] text-white font-black text-[10px] font-mono tracking-wider uppercase shadow-md">
                       MOST POPULAR
                     </div>
                   )}
@@ -176,12 +253,10 @@ export default function PricingPage() {
                   <div className="space-y-3">
                     <span className="text-xs font-mono text-slate-400 font-bold uppercase">{pkg.autos}</span>
                     <h3 className="text-xl font-bold font-display text-[#0B132B]">{pkg.name}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pkg.tagline}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed">{pkg.desc}</p>
                     
                     <div className="pt-2">
-                      <span className="text-3xl font-black font-display text-gradient-brand">₹{effectiveRate}</span>
-                      <span className="text-xs text-slate-500"> / auto / day</span>
-                      {isMonthly && <span className="block text-[10px] text-[#9333EA] font-mono font-bold mt-1">20% Monthly Discount Applied</span>}
+                      <span className="text-2xl font-black font-display text-[#0052FF]">{pkg.rate}</span>
                     </div>
 
                     <ul className="space-y-2 text-xs text-slate-700 pt-3 border-t border-slate-100">
@@ -197,7 +272,7 @@ export default function PricingPage() {
                     href={pkg.link} 
                     className={`w-full py-3.5 rounded-xl text-center font-bold text-xs block transition-all ${
                       pkg.featured 
-                        ? "btn-brand-primary shadow-lg" 
+                        ? "bg-[#0052FF] hover:bg-[#0042D0] text-white shadow-lg" 
                         : "bg-slate-100 hover:bg-slate-200 text-slate-900"
                     }`}
                   >
